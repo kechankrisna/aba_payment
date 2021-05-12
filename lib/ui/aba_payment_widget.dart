@@ -73,7 +73,7 @@ class _ABAPaymentWidgetState extends State<ABAPaymentWidget> {
                   AssetImage("assets/images/ic_payway.png", package: package),
               width: 55,
             ),
-            title: Text("ABA PAYWAY"),
+            title: Text("ABA PAY"),
             subtitle: Text("Tap to pay with ABA Mobile"),
             trailing: _value == AcceptPaymentOption.abapay_deeplink
                 ? Icon(
