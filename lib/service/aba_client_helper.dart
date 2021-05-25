@@ -76,6 +76,10 @@ class ABAClientHelper {
     return hash;
   }
 
+
+  /// [handleTransactionResponse]
+  /// 
+  /// `This will be describe response from each transaction based on status code`
   String handleTransactionResponse(int status) {
     switch (status) {
       case 0:
@@ -129,15 +133,4 @@ class ABAClientHelper {
     }
     return errorDescription;
   }
-}
-
-main() {
-  // var merchant = ABAMerchant();
-  // var helper = ABAClientHelper(merchant);
-  // var dio = helper.getDio();
-  // var tranID = DateTime.now().microsecondsSinceEpoch.toString();
-  // var amount = 0.00;
-  // var hash = helper.getHash(tranID: tranID, amount: amount);
-  // print(hash);
-  //
 }

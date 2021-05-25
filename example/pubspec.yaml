@@ -11,12 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_inappwebview: ^5.3.2
-  url_launcher: ^6.0.3
-  path_provider: ^2.0.1
-  path: ^1.8.0
-  dio: ^4.0.0 # http client helper
-  
+  flutter_easyloading: ^3.0.0
 
   aba_payment:
     # When depending on this package from a real application you should use:

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'screens/cart_screen.dart';
-import 'screens/webview_checkout.dart';
 
 void main() {
   runApp(MyApp());
@@ -22,6 +22,7 @@ class _MyAppState extends State<MyApp> {
       routes: {
         "/": (_) => CartScreen(),
       },
+      builder: EasyLoading.init(),
     );
   }
 }
