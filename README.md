@@ -71,4 +71,4 @@ ABACheckoutContainer(
 
 
 ## Configuration on Server Side
-- [PHP](readme/php.readme.md): This file will tell you each step to config your php code on server side
+- [PHP](readme/README.md): This file will tell you each step to config your php code on server side
