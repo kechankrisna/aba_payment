@@ -5,7 +5,6 @@ This package will allow developer integrate their flutter app with aba payway ea
 ## Support :
 - &check; Android Minimum SDK Version: 21
 - &check; IOS minimum target Version: 12
-- &check; Deskop linux, windows, macos
 
 ## Payment Option:
 - &check; Credit/Debit Card ([flutter_inappwebview](https://pub.dev/packages/flutter_inappwebview))
@@ -19,3 +18,44 @@ This package will allow developer integrate their flutter app with aba payway ea
 
 ## Widgets:
 - [ABACheckoutContainer()](lib/ui/aba_checkout_container.dart):A completed widget which allow user intergrate ABA Payment into their flutter app easily
+
+## Example:
+```
+ABACheckoutContainer(
+    amount: _total,
+    shipping: _shipping,
+    firstname: _firstname,
+    lastname: _lastname,
+    email: _email,
+    phone: _phone,
+    items: [..._items.map((e) => e.toMap()).toList()],
+    checkoutApiUrl: _checkoutApiUrl,
+    merchant: _merchant,
+    onBeginCheckout: (transaction) {
+      setState(() => _isLoading = true);
+      EasyLoading.show(status: 'loading...');
+    },
+    onFinishCheckout: (transaction) {
+      setState(() => _isLoading = false);
+      EasyLoading.dismiss();
+    },
+    onBeginCheckTransaction: (transaction) {
+      setState(() => _isLoading = true);
+      EasyLoading.show(status: 'loading...');
+      print("onBeginCheckTransaction ${transaction.toMap()}");
+    },
+    onFinishCheckTransaction: (transaction) {
+      setState(() => _isLoading = false);
+      EasyLoading.dismiss();
+      print("onFinishCheckTransaction ${transaction.toMap()}");
+    },
+    enabled: !_isLoading,
+    // onPaymentFail: (transaction) {
+    //   print("onPaymentFail ${transaction.toMap()}");
+    // },
+    // onPaymentSuccess: (transaction) {
+    //   print("onPaymentSuccess ${transaction.toMap()}");
+    // },
+)
+```
+- [Completed Cart Screen](example/lib/screens/cart_screen.dart): This file will demonstrate you how to intergrate your flutter app with payway mobile
