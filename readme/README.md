@@ -61,7 +61,7 @@
 - add code below to web.php
     ```
     Route::group(['prefix' => 'payment'], function () {
-        Route::get('/checkout_page', 'UserController@checkoutPage');
+        Route::get('/checkout_page', 'PaymentController@checkoutPage');
     })
     ```
 - checkoutApiUrl is https://yourdomain/payment/checkout_page.php   
