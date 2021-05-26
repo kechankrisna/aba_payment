@@ -68,3 +68,7 @@ ABACheckoutContainer(
 )
 ```
 - [Completed Cart Screen](example/lib/screens/cart_screen.dart): This file will demonstrate you how to intergrate your flutter app with payway mobile
+
+
+## Configuration on Server Side
+- (PHP)[php.readme.md]
