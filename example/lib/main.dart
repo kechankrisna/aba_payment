@@ -17,7 +17,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: "ABA Payment Testing",
       initialRoute: "/",
-      // themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.dark,
       darkTheme: ThemeData.dark(),
       routes: {
         "/": (_) => CartScreen(),

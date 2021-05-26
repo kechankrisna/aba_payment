@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:aba_payment/service/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:aba_payment/enumeration.dart';
 
@@ -37,7 +38,7 @@ class _ABAPaymentListsState extends State<ABAPaymentLists> {
                   AssetImage("assets/images/ic_generic.png", package: package),
               width: 55,
             ),
-            title: Text("Credit/Debit Card"),
+            title: Text(Strings.creditOrDebitCardLabel),
             subtitle: Container(
               padding: EdgeInsets.only(top: 5),
               child: Image(
@@ -62,8 +63,8 @@ class _ABAPaymentListsState extends State<ABAPaymentLists> {
                     AssetImage("assets/images/ic_payway.png", package: package),
                 width: 55,
               ),
-              title: Text("ABA PAYWAY"),
-              subtitle: Text("Scan to pay with ABA Mobile"),
+              title: Text(Strings.abaPaywayLabel),
+              subtitle: Text(Strings.scanToPayWithABAMobileLabel),
               trailing: _value == AcceptPaymentOption.abapay
                   ? Icon(
                       Icons.check_circle_outline_rounded,
@@ -79,8 +80,8 @@ class _ABAPaymentListsState extends State<ABAPaymentLists> {
                     AssetImage("assets/images/ic_payway.png", package: package),
                 width: 55,
               ),
-              title: Text("ABA PAY"),
-              subtitle: Text("Tap to pay with ABA Mobile"),
+              title: Text(Strings.abaPayLabel),
+              subtitle: Text(Strings.tapToPayWithABAMobileLabel),
               trailing: _value == AcceptPaymentOption.abapay_deeplink
                   ? Icon(
                       Icons.check_circle_outline_rounded,

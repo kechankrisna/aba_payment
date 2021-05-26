@@ -1,4 +1,5 @@
 import 'package:aba_payment/model/aba_mechant.dart';
+import 'package:aba_payment/service/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
@@ -28,7 +29,7 @@ class _ABACheckoutWebViewState extends State<ABACheckoutWebView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("CHECKOUT"),
+        title: Text(Strings.checkoutLabel.toUpperCase()),
         centerTitle: true,
       ),
       body: InAppWebView(

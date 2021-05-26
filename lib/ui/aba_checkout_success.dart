@@ -1,3 +1,4 @@
+import 'package:aba_payment/service/strings.dart';
 import 'package:flutter/material.dart';
 
 class ABACheckoutSuccess extends StatelessWidget {
@@ -20,17 +21,17 @@ class ABACheckoutSuccess extends StatelessWidget {
               ),
               SizedBox(height: 15),
               Text(
-                "payment successfully",
+                Strings.paymentSuccessfullyLabel,
                 style: themeData.textTheme.headline6,
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 15),
               Text(
-                "${"your subscription was paid successfully"}.",
+                Strings.paymentProcceedSuccessfullyLabel,
                 textAlign: TextAlign.center,
               ),
               Text(
-                "${"for more detail, go to dashboard and check status of user profile"}.",
+                Strings.moreDetailLabel,
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 15),
@@ -45,7 +46,7 @@ class ABACheckoutSuccess extends StatelessWidget {
                   child: SizedBox(
                     width: double.infinity,
                     child: Text(
-                      "dashboard",
+                      Strings.homeLabel,
                       textAlign: TextAlign.center,
                     ),
                   ),

@@ -9,9 +9,11 @@ PODS:
   - flutter_inappwebview/Core (0.0.1):
     - Flutter
     - OrderedSet (~> 5.0)
-  - OrderedSet (5.0.0)
-  - path_provider (0.0.1):
+  - fluttertoast (0.0.2):
     - Flutter
+    - Toast
+  - OrderedSet (5.0.0)
+  - Toast (4.0.0)
   - url_launcher (0.0.1):
     - Flutter
 
@@ -19,12 +21,13 @@ DEPENDENCIES:
   - aba_payment (from `.symlinks/plugins/aba_payment/ios`)
   - Flutter (from `Flutter`)
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
-  - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
 
 SPEC REPOS:
   trunk:
     - OrderedSet
+    - Toast
 
 EXTERNAL SOURCES:
   aba_payment:
@@ -33,8 +36,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_inappwebview:
     :path: ".symlinks/plugins/flutter_inappwebview/ios"
-  path_provider:
-    :path: ".symlinks/plugins/path_provider/ios"
+  fluttertoast:
+    :path: ".symlinks/plugins/fluttertoast/ios"
   url_launcher:
     :path: ".symlinks/plugins/url_launcher/ios"
 
@@ -42,8 +45,9 @@ SPEC CHECKSUMS:
   aba_payment: 7fa5611da2dce1ffbc5423dba65141391a4303d9
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   flutter_inappwebview: bfd58618f49dc62f2676de690fc6dcda1d6c3721
+  fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
-  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
+  Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
 
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c

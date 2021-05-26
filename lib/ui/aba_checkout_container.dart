@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:aba_payment/enumeration.dart';
 import 'package:aba_payment/model.dart';
+import 'package:aba_payment/service/strings.dart';
 import 'package:aba_payment/ui/aba_checkout_success.dart';
 import 'package:aba_payment/ui/aba_checkout_webview.dart';
 import 'package:flutter/material.dart';
@@ -22,23 +23,68 @@ import 'package:url_launcher/url_launcher.dart';
 /// merchant: ABAMerchant
 /// ```
 class ABACheckoutContainer extends StatefulWidget {
+  /// `amount` respresent total amount to checkout
   final double amount;
+
+  /// `shipping` respresent shipping cost
   final double shipping;
+
+  /// `firstname` respresent user firstname
   final String firstname;
+
+  /// `lastname` respresent user lastname
   final String lastname;
+
+  /// `email` respresent user email
   final String email;
+
+  /// `phone` respresent user valid phone number
   final String phone;
+
+  /// `items` respresent list of items(json format) that user selected
   final List<Map<String, dynamic>> items;
+
+  /// `checkoutApiUrl` respresent checkout api link from the server side
   final String checkoutApiUrl;
+
+  /// `merchant` respesent ABAMerchant object
   final ABAMerchant merchant;
-  final Function(ABATransaction transaction) onBeginCheckout;
-  final Function(ABATransaction transaction) onFinishCheckout;
-  final Function(ABATransaction transaction) onBeginCheckTransaction;
-  final Function(ABATransaction transaction) onFinishCheckTransaction;
-  final Function(int value, String msg) onCreatedTransaction;
-  final Function(ABATransaction transaction) onPaymentSuccess;
-  final Function(ABATransaction transaction) onPaymentFail;
+
+  /// `enabled` allow button to be pressed
   final bool enabled;
+
+  /// `checkoutLabel` allow user to change button text
+  final Widget checkoutLabel;
+
+  /// ### METHOD: `onBeginCheckout(ABATransaction transaction)`
+  /// `Triggered when user pressed checkout button`
+  final Function(ABATransaction transaction) onBeginCheckout;
+
+  /// ### METHOD: `onFinishCheckout(ABATransaction transaction)`
+  /// `Triggered when after user pressed checkout button and transaction is created successfully`
+  final Function(ABATransaction transaction) onFinishCheckout;
+
+  /// ### METHOD: `onBeginCheckTransaction(ABATransaction transaction)`
+  /// `Triggered when user completed transaction payment and current transaction will be started to check if it success or failed`
+  final Function(ABATransaction transaction) onBeginCheckTransaction;
+
+  /// ### METHOD: `onFinishCheckTransaction(ABATransaction transaction)`
+  /// `Triggered when user completed transaction payment and current transaction checking event is finished `
+  final Function(ABATransaction transaction) onFinishCheckTransaction;
+
+  final Function(int value, String msg) onCreatedTransaction;
+
+  /// ### METHOD: `onPaymentSuccess(ABATransaction transaction)`
+  /// `Triggered when payment transaction was completed successfully`
+  /// `User can route to another screen after successfully`
+  /// #### `Default:` navigator to ABACheckoutSuccess()
+  final Function(ABATransaction transaction) onPaymentSuccess;
+
+  /// ### METHOD: `onPaymentSuccess(ABATransaction transaction)`
+  /// `Triggered when payment transaction was uncompleted`
+  /// `User can show any message`
+  /// #### `Default:` toast bar will be showed to describe the problem
+  final Function(ABATransaction transaction) onPaymentFail;
 
   const ABACheckoutContainer({
     Key key,
@@ -51,6 +97,8 @@ class ABACheckoutContainer extends StatefulWidget {
     this.items = const [],
     @required this.checkoutApiUrl,
     @required this.merchant,
+    this.enabled: false,
+    this.checkoutLabel,
     this.onBeginCheckout,
     this.onFinishCheckout,
     this.onBeginCheckTransaction,
@@ -58,7 +106,6 @@ class ABACheckoutContainer extends StatefulWidget {
     this.onCreatedTransaction,
     this.onPaymentSuccess,
     this.onPaymentFail,
-    this.enabled: false,
   })  : assert(amount > 0),
         assert(lastname != null),
         assert(firstname != null),
@@ -129,10 +176,11 @@ class _ABACheckoutContainerState extends State<ABACheckoutContainer>
               onPressed: !widget.enabled ? null : _onBeginCheckout,
               child: SizedBox(
                 width: double.infinity,
-                child: Text(
-                  "checkout",
-                  textAlign: TextAlign.center,
-                ),
+                child: widget.checkoutLabel ??
+                    Text(
+                      Strings.checkoutLabel,
+                      textAlign: TextAlign.center,
+                    ),
               ),
             ),
           ),
