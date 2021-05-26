@@ -12,4 +12,4 @@ This package will allow developer integrate their flutter app with aba payway ea
 - &check; ABA Payway Mobile ( [url_launcher](https://pub.dev/packages/url_launcher) )
 
 ## Classes:
-- [ABAClientHelper](aba_client_helper.dart)
+- [ABAClientHelper](lib/service/aba_client_helper.dart)
