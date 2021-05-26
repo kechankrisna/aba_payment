@@ -69,7 +69,7 @@ class ABACheckoutContainer extends StatefulWidget {
   final Function(ABATransaction transaction) onBeginCheckTransaction;
 
   /// ### METHOD: `onFinishCheckTransaction(ABATransaction transaction)`
-  /// `Triggered when user completed transaction payment and current transaction checking event is finished `
+  /// `Triggered when user completed transaction payment and current transaction checking event is finished`
   final Function(ABATransaction transaction) onFinishCheckTransaction;
 
   final Function(int value, String msg) onCreatedTransaction;
@@ -80,7 +80,7 @@ class ABACheckoutContainer extends StatefulWidget {
   /// #### `Default:` navigator to ABACheckoutSuccess()
   final Function(ABATransaction transaction) onPaymentSuccess;
 
-  /// ### METHOD: `onPaymentSuccess(ABATransaction transaction)`
+  /// ### METHOD: `onPaymentFail(ABATransaction transaction)`
   /// `Triggered when payment transaction was uncompleted`
   /// `User can show any message`
   /// #### `Default:` toast bar will be showed to describe the problem
