@@ -19,6 +19,15 @@ This package will allow developer integrate their flutter app with aba payway ea
 ## Widgets:
 - [ABACheckoutContainer()](lib/ui/aba_checkout_container.dart):A completed widget which allow user intergrate ABA Payment into their flutter app easily
 
+### Available methods:
+- `onBeginCheckout(ABATransaction transaction)`: Triggered when user pressed checkout button.
+- `onFinishCheckout(ABATransaction transaction)`: Triggered when after user pressed checkout button and transaction is created successfully.
+- `onBeginCheckTransaction(ABATransaction transaction)`: Triggered when user completed transaction payment and current transaction will be started to check if it success or failed.
+- `onFinishCheckTransaction(ABATransaction transaction)`: Triggered when user completed transaction payment and current transaction checking event is finished.
+- `onCreatedTransaction(int value, String msg)`: Triggered when user completed transaction payment and current transaction checking event is finished.
+- `onPaymentSuccess(ABATransaction transaction)`: Triggered when payment transaction was completed successfully. User can route to another screen after successfully. By default navigated to ABACheckoutSuccess()
+- `onPaymentFail(ABATransaction transaction)`: Triggered when payment transaction was uncompleted. User can show any message.
+
 ## Example:
 ```
 ABACheckoutContainer(
@@ -59,11 +68,3 @@ ABACheckoutContainer(
 )
 ```
 - [Completed Cart Screen](example/lib/screens/cart_screen.dart): This file will demonstrate you how to intergrate your flutter app with payway mobile
-### Available methods:
-- `onBeginCheckout(ABATransaction transaction)`: Triggered when user pressed checkout button.
-- `onFinishCheckout(ABATransaction transaction)`: Triggered when after user pressed checkout button and transaction is created successfully.
-- `onBeginCheckTransaction(ABATransaction transaction)`: Triggered when user completed transaction payment and current transaction will be started to check if it success or failed.
-- `onFinishCheckTransaction(ABATransaction transaction)`: Triggered when user completed transaction payment and current transaction checking event is finished.
-- `onCreatedTransaction(int value, String msg)`: Triggered when user completed transaction payment and current transaction checking event is finished.
-- `onPaymentSuccess(ABATransaction transaction)`: Triggered when payment transaction was completed successfully. User can route to another screen after successfully. By default navigated to ABACheckoutSuccess()
-- `onPaymentFail(ABATransaction transaction)`: Triggered when payment transaction was uncompleted. User can show any message.
