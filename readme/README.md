@@ -64,4 +64,4 @@
         Route::get('/checkout_page', 'PaymentController@checkoutPage');
     })
     ```
-- checkoutApiUrl is https://yourdomain/payment/checkout_page.php   
+- checkoutApiUrl is https://yourdomain/payment/checkout_page  
