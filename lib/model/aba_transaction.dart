@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:aba_payment/enumeration.dart';
 import 'package:aba_payment/extension.dart';
 import 'package:aba_payment/model/aba_mechant.dart';
+import 'package:aba_payment/model/aba_payment.dart';
 import 'package:aba_payment/service/aba_client_helper.dart';
 import 'package:dio/dio.dart';
 
@@ -85,13 +86,20 @@ class ABATransaction {
   /// ### [toMap]
   /// [return] map object
   Map<String, dynamic> toMap() {
-    String _items = base64Encode(utf8.encode("$items"));
+    String _items =
+        items?.isNotEmpty == true ? base64Encode(utf8.encode("$items")) : "";
+
+    String _hash = ABAClientHelper(merchant).getHash(
+        tranID: tranID, amount: amount, items: _items, shipping: "$shipping");
+    ABAPayment.logger.info("tran_id $tranID");
+    ABAPayment.logger.info("_hash $_hash");
+    ABAPayment.logger.info("_items $_items");
+    ABAPayment.logger.info("amount $amount");
     var map = {
       "tran_id": tranID,
       "amount": "$amount",
       "items": _items,
-      "hash": ABAClientHelper(merchant).getHash(
-          tranID: tranID, amount: amount, items: _items, shipping: "$shipping"),
+      "hash": _hash,
       "firstname": firstname,
       "lastname": lastname,
       "phone": phone,

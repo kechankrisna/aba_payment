@@ -249,6 +249,7 @@ class _ABACheckoutContainerState extends State<ABACheckoutContainer>
       } else {
         uri = Uri.http(parsed.authority, parsed.path, map);
       }
+      ABAPayment.logger.error(uri);
       widget.onFinishCheckout?.call(_transaction);
       await Navigator.push(
           context,

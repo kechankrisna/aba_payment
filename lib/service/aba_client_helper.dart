@@ -76,9 +76,8 @@ class ABAClientHelper {
     return hash;
   }
 
-
   /// [handleTransactionResponse]
-  /// 
+  ///
   /// `This will be describe response from each transaction based on status code`
   String handleTransactionResponse(int status) {
     switch (status) {
