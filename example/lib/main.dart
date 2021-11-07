@@ -16,6 +16,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "ABA Payment Testing",
+      debugShowCheckedModeBanner: false,
       initialRoute: "/",
       themeMode: ThemeMode.dark,
       darkTheme: ThemeData.dark(),
