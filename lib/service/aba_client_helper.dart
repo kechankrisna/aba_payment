@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'package:aba_payment/model/aba_payment.dart';
 import 'package:crypto/crypto.dart' as crypto;
 import 'package:aba_payment/model/aba_mechant.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 
 class ABAClientHelper {
   final ABAMerchant merchant;
@@ -18,7 +20,7 @@ class ABAClientHelper {
   Dio getDio() {
     Dio dio = Dio();
     dio.options.baseUrl =
-        "${merchant.baseApiUrl}/api/${merchant.merchantApiName}";
+        "${merchant.baseApiUrl}/api/payment-gateway/v1/payments/purchase";
     dio.options.connectTimeout = 60 * 1000; //60 seconds
     dio.options.receiveTimeout = 60 * 1000; //60 seconds
 
@@ -26,6 +28,7 @@ class ABAClientHelper {
     dio.interceptors
         .add(InterceptorsWrapper(onRequest: (options, handler) async {
       options.headers["Referer"] = merchant.refererDomain;
+      // options.headers["Accept"] = "application/json";
       return handler.next(options);
     }, onResponse: (response, handler) {
       // Do something with response data
@@ -56,21 +59,53 @@ class ABAClientHelper {
   /// var merchant = ABAMerchant();
   /// var helper = ABAClientHelper(merchant);
   /// var tranID = DateTime.now().microsecondsSinceEpoch.toString();
+  /// var reqTime = DateTime.now().toUtc();
   /// var amount = 0.00;
   /// var hash = helper.getHash(tranID: tranID, amount: amount);
   /// print(hash);
   /// ```
+
   String getHash({
-    String tranID,
-    double amount,
-    String items: "",
-    String shipping: "",
+    @required String reqTime,
+    @required String tranID,
+    String amount = "",
+    String items = "",
+    String shipping = "",
+    String ctid = "",
+    String pwt = "",
+    String firstName = "",
+    String lastName = "",
+    String email = "",
+    String phone = "",
+    String type = "",
+    String paymentOption = "",
+    String returnUrl = "",
+    String cancelUrl = "",
+    String continueSuccessUrl = "",
+    String returnDeeplink = "",
+    String currency = "USD",
+    String customFields = "",
+    String returnParams = "",
   }) {
+    // String =
+    // req_time + merchant_id +
+    // tran_id + amount + items +
+    // shipping + ctid + pwt +
+    // firstname + lastname +
+    // email + phone + type +
+    // payment_option + return_url +
+    // cancel_url + continue_success_url +
+    // return_deeplink + currency + custom_fields + return_params with public_key.
     assert(tranID != null);
     // assert(amount != null);
     var key = utf8.encode(merchant.merchantApiKey);
-    var bytes = utf8.encode(
-        "${merchant.merchantID}$tranID${amount ?? ""}${items ?? ""}${shipping ?? ""}");
+    var raw =
+        "$reqTime ${merchant.merchantID} $tranID $amount $items $shipping $ctid $pwt $firstName $lastName $email $phone $type $paymentOption $returnUrl $cancelUrl $continueSuccessUrl $returnDeeplink $currency $customFields $returnParams";
+    var str =
+        "$reqTime${merchant.merchantID}$tranID$amount$items$shipping$ctid$pwt$firstName$lastName$email$phone$type$paymentOption$returnUrl$cancelUrl$continueSuccessUrl$returnDeeplink$currency$customFields$returnParams";
+    ABAPayment.logger.warning("raw $raw");
+    ABAPayment.logger.warning("str $str");
+    var bytes = utf8.encode(str);
     var digest = crypto.Hmac(crypto.sha512, key).convert(bytes);
     var hash = base64Encode(digest.bytes);
     return hash;

@@ -213,9 +213,13 @@ class _ABACheckoutContainerState extends State<ABACheckoutContainer>
 
     if (_transaction.paymentOption == AcceptPaymentOption.abapay_deeplink) {
       var result = await _transaction.create();
+
       widget.onFinishCheckout?.call(_transaction);
       ABAPayment.logger(result.toMap());
-      if (result.status < 5) {
+      if (result.status == null) {
+        return;
+      }
+      if (result.status < 0) {
         widget.onCreatedTransaction?.call(result.status, result.description);
 
         /// [open native using deeplink]
