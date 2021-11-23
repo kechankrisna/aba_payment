@@ -19,8 +19,7 @@ class ABAClientHelper {
   /// ```
   Dio getDio() {
     Dio dio = Dio();
-    dio.options.baseUrl =
-        "${merchant.baseApiUrl}/api/payment-gateway/v1/payments/purchase";
+    dio.options.baseUrl = merchant.baseApiUrl;
     dio.options.connectTimeout = 60 * 1000; //60 seconds
     dio.options.receiveTimeout = 60 * 1000; //60 seconds
 
@@ -114,22 +113,64 @@ class ABAClientHelper {
   /// [handleTransactionResponse]
   ///
   /// `This will be describe response from each transaction based on status code`
-  String handleTransactionResponse(int status) {
+  static String handleTransactionResponse(int status) {
     switch (status) {
-      case 0:
-        return "success";
-        break;
       case 1:
-        return "invalid hash";
+        return "Invalid Hash, Hash generated is incorrect and not following the guideline to generate the Hash.";
         break;
       case 2:
-        return "invalid hash";
+        return "Invalid Transaction ID, unsupported characters included in Transaction ID";
         break;
       case 3:
-        return "invalid amount";
+        return "Invalid Amount format need not include decimal point for KHR transaction. example for USD 100.00 for KHR 100";
         break;
       case 4:
-        return "duplicate tran_id";
+        return "Duplicate Transaction ID, the transaction ID already exists in PayWay, generate new transaction.";
+        break;
+      case 5:
+        return "Invalid Continue Success URL, (Main domain must be registered in PayWay backend to use success URL)";
+        break;
+      case 6:
+        return "Invalid Domain Name (Request originated from non-whitelisted domain need to register domain in PayWay backend)";
+        break;
+      case 7:
+        return "Invalid Return Param (String must be lesser than 500 chars)";
+        break;
+      case 9:
+        return "Invalid Limit Amount (The amount must be smaller than value that allowed in PayWay backend)";
+        break;
+      case 10:
+        return "Invalid Shipping Amount";
+        break;
+      case 11:
+        return "PayWay Server Side Error";
+        break;
+      case 12:
+        return "Invalid Currency Type (Merchant is allowed only one currency - USD or KHR)";
+        break;
+      case 13:
+        return "Invalid Item, value for items parameters not following the guideline to generate the base 64 encoded array of item list.";
+        break;
+      case 15:
+        return "Invalid Channel Values for parameter topup_channel";
+        break;
+      case 16:
+        return "Invalid First Name - unsupported special characters included in value";
+        break;
+      case 17:
+        return "Invalid Last Name";
+        break;
+      case 18:
+        return "Invalid Phone Number";
+        break;
+      case 19:
+        return "Invalid Email Address";
+        break;
+      case 20:
+        return "Required purchase details when checkout";
+        break;
+      case 21:
+        return "Expired production key";
         break;
       default:
         return "other - server-side error";

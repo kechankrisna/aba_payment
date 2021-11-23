@@ -21,7 +21,7 @@ class ABAServerResponse {
 
   factory ABAServerResponse.fromMap(Map<String, dynamic> map) {
     return ABAServerResponse(
-      status: int.tryParse("${map["status"]}"),
+      status: map["status"] is int ? map["status"] : -1,
       description: map["description"],
       qrString: map["qrString"],
       qrImage: map["qrImage"],

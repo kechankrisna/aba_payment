@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:aba_payment/enumeration.dart';
 import 'package:aba_payment/model.dart';
+import 'package:aba_payment/model/aba_transacition_item.dart';
 import 'package:aba_payment/service/strings.dart';
 import 'package:aba_payment/ui/aba_checkout_success.dart';
 import 'package:aba_payment/ui/aba_checkout_webview.dart';
@@ -42,7 +43,7 @@ class ABACheckoutContainer extends StatefulWidget {
   final String phone;
 
   /// `items` respresent list of items(json format) that user selected
-  final List<Map<String, dynamic>> items;
+  final List<ABATransactionItem> items;
 
   /// `checkoutApiUrl` respresent checkout api link from the server side
   final String checkoutApiUrl;
@@ -253,7 +254,7 @@ class _ABACheckoutContainerState extends State<ABACheckoutContainer>
       } else {
         uri = Uri.http(parsed.authority, parsed.path, map);
       }
-      ABAPayment.logger.error(uri);
+      ABAPayment.logger.info(uri);
       widget.onFinishCheckout?.call(_transaction);
       await Navigator.push(
           context,
