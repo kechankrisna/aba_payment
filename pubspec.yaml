@@ -12,11 +12,12 @@ dependencies:
     sdk: flutter
   dio: ^4.0.0 # http client helper
   crypto: ^3.0.1 # hash helper
+  intl: ^0.17.0 # date fomart
   flutter_inappwebview: ^5.3.2 # embed webview into widget
   url_launcher: ^6.0.4 # launch any scheme
   easy_logger: ^0.0.2 # bueaty logger
   fluttertoast: ^8.0.7 # easy to handle toast bar
-
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
