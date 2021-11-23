@@ -162,23 +162,15 @@ class ABATransaction {
     var res = ABAServerResponse(status: 11);
     Map<String, dynamic> map = this.toMap();
     map["type"] = "purchase";
-    ABAPayment.logger.debug(map);
     var formData = FormData.fromMap(map);
     try {
       var helper = ABAClientHelper(merchant);
       var dio = helper.getDio();
       Response<String> response = await dio.post("/purchase", data: formData);
       // ABAPayment.logger.debug(response);
-      try {
-        var map = json.decode(response.data) as Map<String, dynamic>;
-        res = ABAServerResponse.fromMap(map);
-        return res;
-      } catch (e) {
-        res.status = 0;
-        res.description = "success";
-        res.rawcontent = response.data;
-        return res;
-      }
+      var map = json.decode(response.data) as Map<String, dynamic>;
+      res = ABAServerResponse.fromMap(map);
+      return res;
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
       res.description = ABAClientHelper.handleResponseError(error);
@@ -190,19 +182,23 @@ class ABATransaction {
   /// check the current status of this transaction vai its id
   Future<ABAServerResponse> check() async {
     var res = ABAServerResponse(status: 11);
+    final _reqTime = reqTime;
     var hash =
-        ABAClientHelper(merchant).getHash(reqTime: reqTime, tranID: tranID);
-    FormData form = FormData.fromMap({"tran_id": tranID, "hash": hash});
+        ABAClientHelper(merchant).getHash(reqTime: _reqTime, tranID: tranID);
+    var form = FormData.fromMap({
+      "req_time": _reqTime,
+      "tran_id": tranID,
+      "hash": hash,
+      "merchant_id": this.merchant.merchantID,
+    });
     var helper = ABAClientHelper(merchant);
+    ABAPayment.logger.error("tid $tranID");
     try {
       Response<String> response =
           await helper.getDio().post("/check-transaction", data: form);
       var map = json.decode(response.data) as Map<String, dynamic>;
-      ABAPayment.logger.error("checkMap $map");
+      ABAPayment.logger.error("checkMap $map $response");
       res = ABAServerResponse.fromMap(map);
-      if (res.status != 0) {
-        res.description = ABAClientHelper.handleTransactionResponse(res.status);
-      }
       return res;
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");

@@ -20,8 +20,15 @@ class ABAServerResponse {
   });
 
   factory ABAServerResponse.fromMap(Map<String, dynamic> map) {
+    int _statusCode = -1;
+    if (map["status"] is int) {
+      _statusCode = map["status"];
+    }
+    if (map["status"] is Map) {
+      _statusCode = int.tryParse("${map["status"]["code"]}");
+    }
     return ABAServerResponse(
-      status: map["status"] is int ? map["status"] : -1,
+      status: _statusCode,
       description: map["description"],
       qrString: map["qrString"],
       qrImage: map["qrImage"],

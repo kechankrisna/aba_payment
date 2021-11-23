@@ -27,7 +27,7 @@ class ABAClientHelper {
     dio.interceptors
         .add(InterceptorsWrapper(onRequest: (options, handler) async {
       options.headers["Referer"] = merchant.refererDomain;
-      // options.headers["Accept"] = "application/json";
+      options.headers["Accept"] = "application/json";
       return handler.next(options);
     }, onResponse: (response, handler) {
       // Do something with response data
@@ -82,7 +82,7 @@ class ABAClientHelper {
     String cancelUrl = "",
     String continueSuccessUrl = "",
     String returnDeeplink = "",
-    String currency = "USD",
+    String currency = "",
     String customFields = "",
     String returnParams = "",
   }) {

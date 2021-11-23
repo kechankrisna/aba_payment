@@ -213,33 +213,34 @@ class _ABACheckoutContainerState extends State<ABACheckoutContainer>
     widget.onBeginCheckout?.call(_transaction);
 
     if (_transaction.paymentOption == AcceptPaymentOption.abapay_deeplink) {
-      var result = await _transaction.create();
+      var createResult = await _transaction.create();
 
       widget.onFinishCheckout?.call(_transaction);
-      ABAPayment.logger(result.toMap());
-      if (result.status == null) {
+      ABAPayment.logger(createResult.toMap());
+      if (createResult.status == null) {
         return;
       }
-      if (result.status < 0) {
-        widget.onCreatedTransaction?.call(result.status, result.description);
+      if (createResult.status == 0) {
+        widget.onCreatedTransaction
+            ?.call(createResult.status, createResult.description);
 
         /// [open native using deeplink]
-        if (result.abapayDeeplink != null) {
-          if (await canLaunch(result.abapayDeeplink)) {
+        if (createResult.abapayDeeplink != null) {
+          if (await canLaunch(createResult.abapayDeeplink)) {
             setState(() => _requiredCheck = true);
-            await launch(result.abapayDeeplink);
+            await launch(createResult.abapayDeeplink);
           } else {
             if (Platform.isIOS) {
-              await launch(result.appStore);
+              await launch(createResult.appStore);
             } else if (Platform.isAndroid) {
-              await launch(result.playStore);
+              await launch(createResult.playStore);
             }
           }
         } else {
           Fluttertoast.showToast(msg: "error deeplink");
         }
       } else {
-        Fluttertoast.showToast(msg: "${result.description}");
+        Fluttertoast.showToast(msg: "${createResult.description}ff");
       }
     } else if (_transaction.paymentOption == AcceptPaymentOption.cards ||
         _transaction.paymentOption == AcceptPaymentOption.abapay) {
@@ -272,12 +273,13 @@ class _ABACheckoutContainerState extends State<ABACheckoutContainer>
   _checkTransaction() async {
     widget.onBeginCheckTransaction?.call(_transaction);
     ABAPayment.logger("===== begin checking transaction =====");
-    var check = await _transaction.check();
+    var checkResult = await _transaction.check();
     setState(() => _requiredCheck = false);
     widget.onFinishCheckTransaction?.call(_transaction);
     ABAPayment.logger("===== finish checking transaction =====");
-    if (check.status == 0) {
-      assert(check.status == 0);
+    if (checkResult.status == 0) {
+      ABAPayment.logger.error("checkResult.status");
+      assert(checkResult.status == 0);
       if (widget.onPaymentSuccess != null) {
         widget.onPaymentSuccess.call(_transaction);
       } else {
@@ -288,10 +290,10 @@ class _ABACheckoutContainerState extends State<ABACheckoutContainer>
       if (widget.onPaymentFail != null) {
         widget.onPaymentFail.call(_transaction);
       } else {
-        if (check.status == 6) {
+        if (checkResult.status == 6) {
           Fluttertoast.showToast(msg: "please try again");
         } else {
-          await Fluttertoast.showToast(msg: check.description);
+          await Fluttertoast.showToast(msg: checkResult.description);
         }
       }
     }
