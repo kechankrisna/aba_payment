@@ -88,20 +88,20 @@ class _CartScreenState extends State<CartScreen> {
             onBeginCheckTransaction: (transaction) {
               setState(() => _isLoading = true);
               EasyLoading.show(status: 'loading...');
-              print("onBeginCheckTransaction ${transaction.toMap()}");
+              print("onBeginCheckTransaction ${transaction!.toMap()}");
             },
             onFinishCheckTransaction: (transaction) {
               setState(() => _isLoading = false);
 
               EasyLoading.dismiss();
-              print("onFinishCheckTransaction ${transaction.toMap()}");
+              print("onFinishCheckTransaction ${transaction!.toMap()}");
             },
             enabled: !_isLoading,
             // onPaymentFail: (transaction) {
             //   print("onPaymentFail ${transaction.toMap()}");
             // },
             onPaymentSuccess: (transaction) {
-              print("onPaymentSuccess ${transaction.toMap()}");
+              print("onPaymentSuccess ${transaction!.toMap()}");
             },
           ),
         ],

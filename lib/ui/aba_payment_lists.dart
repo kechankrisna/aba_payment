@@ -6,17 +6,17 @@ import 'package:aba_payment/enumeration.dart';
 const package = "aba_payment";
 
 class ABAPaymentLists extends StatefulWidget {
-  final AcceptPaymentOption value;
-  final Function(AcceptPaymentOption value) onChanged;
+  final AcceptPaymentOption? value;
+  final Function(AcceptPaymentOption? value)? onChanged;
 
-  const ABAPaymentLists({Key key, this.value, this.onChanged})
+  const ABAPaymentLists({Key? key, this.value, this.onChanged})
       : super(key: key);
   @override
   _ABAPaymentListsState createState() => _ABAPaymentListsState();
 }
 
 class _ABAPaymentListsState extends State<ABAPaymentLists> {
-  AcceptPaymentOption _value;
+  AcceptPaymentOption? _value;
 
   @override
   void initState() {

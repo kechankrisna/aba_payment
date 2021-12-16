@@ -12,22 +12,22 @@ import 'package:intl/intl.dart';
 import 'aba_server_response.dart';
 
 class ABATransaction {
-  ABAMerchant merchant;
-  String tranID;
-  double amount;
-  List<ABATransactionItem> items;
-  String hash;
-  String firstname;
-  String lastname;
-  String phone;
-  String email;
-  String returnUrl;
-  String continueSuccessUrl;
-  String returnParams;
-  String phoneCountryCode;
-  String preAuth;
-  AcceptPaymentOption paymentOption;
-  double shipping;
+  late ABAMerchant? merchant;
+  late String? tranID;
+  late double? amount;
+  List<ABATransactionItem>? items;
+  String? hash;
+  String? firstname;
+  String? lastname;
+  String? phone;
+  String? email;
+  String? returnUrl;
+  String? continueSuccessUrl;
+  String? returnParams;
+  String? phoneCountryCode;
+  String? preAuth;
+  AcceptPaymentOption? paymentOption;
+  double? shipping;
 
   String get reqTime => "${DateFormat("yMddHms").format(DateTime.now())}";
 
@@ -86,13 +86,13 @@ class ABATransaction {
       phoneCountryCode: map["phone_country_code"],
       preAuth: "PreAuth",
       paymentOption: map["payment_option"].toString().toAcceptPaymentOption,
-      shipping: map["shipping"] ?? "",
+      shipping: map["shipping"] ?? "" as double?,
     );
   }
 
   double get totalPrice {
     double result = 0;
-    this.items.fold(result, (pre, e) => result += e.price * e.quantity);
+    this.items!.fold(result, (dynamic pre, e) => result += e.price! * e.quantity!);
     return result;
   }
 
@@ -105,7 +105,7 @@ class ABATransaction {
         ABAPayment.logger
             .error("amount $amount is not equal totalPrice $totalPrice");
       }
-      var itemText = [...this.items.map((e) => e.toMap()).toList()];
+      var itemText = [...this.items!.map((e) => e.toMap()).toList()];
       _encodedItem = base64Encode(json.encode(itemText).runes.toList());
       // _encodedItem = "W3sibmFtZSI6InRlc3QiLCJxdWFudGl0eSI6MSwicHJpY2UiOjZ9XQ==";
       ABAPayment.logger.info("itemText $itemText");
@@ -115,7 +115,7 @@ class ABATransaction {
     var _type = "purchase";
     String _hash = ABAClientHelper(merchant).getHash(
       reqTime: reqTime,
-      tranID: tranID,
+      tranID: tranID!,
       amount: "$amount",
       items: _encodedItem,
       shipping: "$shipping",
@@ -124,7 +124,7 @@ class ABATransaction {
       email: email,
       phone: phone,
       type: _type,
-      paymentOption: paymentOption.toText,
+      paymentOption: paymentOption!.toText,
       currency: _currency,
     );
     ABAPayment.logger.info("req_time $reqTime");
@@ -147,10 +147,10 @@ class ABATransaction {
       // "return_params": {"tran_id": tranID, "status": 0},
       // "phone_country_code": phoneCountryCode ?? "855",
       // "PreAuth": preAuth,
-      "payment_option": "${paymentOption.toText}",
+      "payment_option": "${paymentOption!.toText}",
       "shipping": "$shipping",
       "currency": "$_currency",
-      "merchant_id": "${merchant.merchantID}",
+      "merchant_id": "${merchant!.merchantID}",
       "type": _type,
     };
     return map;
@@ -168,7 +168,7 @@ class ABATransaction {
       var dio = helper.getDio();
       Response<String> response = await dio.post("/purchase", data: formData);
       // ABAPayment.logger.debug(response);
-      var map = json.decode(response.data) as Map<String, dynamic>;
+      var map = json.decode(response.data!) as Map<String, dynamic>;
       res = ABAServerResponse.fromMap(map);
       return res;
     } catch (error, stacktrace) {
@@ -184,19 +184,19 @@ class ABATransaction {
     var res = ABAServerResponse(status: 11);
     final _reqTime = reqTime;
     var hash =
-        ABAClientHelper(merchant).getHash(reqTime: _reqTime, tranID: tranID);
+        ABAClientHelper(merchant).getHash(reqTime: _reqTime, tranID: tranID!);
     var form = FormData.fromMap({
       "req_time": _reqTime,
       "tran_id": tranID,
       "hash": hash,
-      "merchant_id": this.merchant.merchantID,
+      "merchant_id": this.merchant!.merchantID,
     });
     var helper = ABAClientHelper(merchant);
     ABAPayment.logger.error("tid $tranID");
     try {
       Response<String> response =
           await helper.getDio().post("/check-transaction", data: form);
-      var map = json.decode(response.data) as Map<String, dynamic>;
+      var map = json.decode(response.data!) as Map<String, dynamic>;
       ABAPayment.logger.error("checkMap $map $response");
       res = ABAServerResponse.fromMap(map);
       return res;
@@ -212,6 +212,6 @@ class ABATransaction {
   /// otherwise false
   Future<bool> validate() async {
     var result = await this.check();
-    return (result?.status == 0);
+    return (result.status == 0);
   }
 }

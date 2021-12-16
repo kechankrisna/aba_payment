@@ -13,31 +13,26 @@
 class ABAMerchant {
   /// [internal]
   /// provided by api
-  String _merchantID;
-  String _merchantApiKey;
-  String _merchantApiName;
-  String _baseApiUrl;
-  String _refererDomain;
+  late String? _merchantID;
+  late String? _merchantApiKey;
+  late String? _merchantApiName;
+  late String? _baseApiUrl;
+  late String? _refererDomain;
 
   /// [getter]
-  String get merchantID => _merchantID;
-  String get merchantApiKey => _merchantApiKey;
-  String get merchantApiName => _merchantApiName;
-  String get baseApiUrl => _baseApiUrl;
-  String get refererDomain => _refererDomain;
+  String? get merchantID => _merchantID;
+  String? get merchantApiKey => _merchantApiKey;
+  String? get merchantApiName => _merchantApiName;
+  String? get baseApiUrl => _baseApiUrl;
+  String? get refererDomain => _refererDomain;
 
   ABAMerchant({
-    String merchantID,
-    String merchantApiKey,
-    String merchantApiName,
-    String baseApiUrl,
-    String refererDomain,
+    required String merchantID,
+    required String merchantApiKey,
+    required String merchantApiName,
+    required String baseApiUrl,
+    required String refererDomain,
   }) {
-    assert(merchantID != null);
-    assert(merchantApiKey != null);
-    assert(merchantApiName != null);
-    assert(baseApiUrl != null);
-    assert(refererDomain != null);
     _merchantID = merchantID;
     _merchantApiKey = merchantApiKey;
     _merchantApiName = merchantApiName;
@@ -59,7 +54,7 @@ class ABAMerchant {
 
   /// ### [toMap]
   /// return map of <string, string>
-  Map<String, String> toMap() {
+  Map<String, String?> toMap() {
     return {
       "merchantID": merchantID,
       "merchantApiKey": merchantApiKey,

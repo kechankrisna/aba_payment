@@ -1,7 +1,7 @@
 class ABATransactionItem {
-  String name;
-  double quantity;
-  double price;
+  String? name;
+  double? quantity;
+  double? price;
 
   ABATransactionItem({this.name, this.quantity, this.price});
 
@@ -14,9 +14,9 @@ class ABATransactionItem {
   }
 
   copyWith({
-    String name,
-    double quantity,
-    double price,
+    String? name,
+    double? quantity,
+    double? price,
   }) {
     return ABATransactionItem(
       name: name ?? this.name,

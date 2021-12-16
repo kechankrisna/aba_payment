@@ -1,12 +1,12 @@
 class ABAServerResponse {
-  int status;
-  String description;
-  String qrString;
-  String qrImage;
-  String abapayDeeplink;
-  String appStore;
-  String playStore;
-  String rawcontent;
+  int? status;
+  String? description;
+  String? qrString;
+  String? qrImage;
+  String? abapayDeeplink;
+  String? appStore;
+  String? playStore;
+  String? rawcontent;
 
   ABAServerResponse({
     this.status,
@@ -25,7 +25,7 @@ class ABAServerResponse {
       _statusCode = map["status"];
     }
     if (map["status"] is Map) {
-      _statusCode = int.tryParse("${map["status"]["code"]}");
+      _statusCode = int.tryParse("${map["status"]["code"]}")!;
     }
     return ABAServerResponse(
       status: _statusCode,

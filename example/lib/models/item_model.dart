@@ -1,7 +1,7 @@
 class ItemModel {
-  String name;
-  double price;
-  double quantity;
+  String? name;
+  double? price;
+  double? quantity;
 
   ItemModel({
     this.name,

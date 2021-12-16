@@ -11,13 +11,10 @@ extension StringParsing on String {
     switch (this) {
       case "cards":
         return AcceptPaymentOption.cards;
-        break;
       case "abapay":
         return AcceptPaymentOption.abapay;
-        break;
       case "abapay_deeplink":
         return AcceptPaymentOption.abapay_deeplink;
-        break;
       default:
         return AcceptPaymentOption.cards;
     }

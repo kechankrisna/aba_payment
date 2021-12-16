@@ -1,12 +1,12 @@
 import 'dart:io';
 import 'package:aba_payment/enumeration.dart';
 import 'package:aba_payment/model.dart';
-import 'package:aba_payment/model/aba_transacition_item.dart';
+// import 'package:aba_payment/model/aba_transacition_item.dart';
 import 'package:aba_payment/service/strings.dart';
 import 'package:aba_payment/ui/aba_checkout_success.dart';
 import 'package:aba_payment/ui/aba_checkout_webview.dart';
 import 'package:flutter/material.dart';
-import 'package:aba_payment/model/aba_transaction.dart';
+// import 'package:aba_payment/model/aba_transaction.dart';
 import 'package:aba_payment/ui/aba_payment_lists.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -55,49 +55,49 @@ class ABACheckoutContainer extends StatefulWidget {
   final bool enabled;
 
   /// `checkoutLabel` allow user to change button text
-  final Widget checkoutLabel;
+  final Widget? checkoutLabel;
 
   /// ### METHOD: `onBeginCheckout(ABATransaction transaction)`
   /// `Triggered when user pressed checkout button`
-  final Function(ABATransaction transaction) onBeginCheckout;
+  final Function(ABATransaction? transaction)? onBeginCheckout;
 
   /// ### METHOD: `onFinishCheckout(ABATransaction transaction)`
   /// `Triggered when after user pressed checkout button and transaction is created successfully`
-  final Function(ABATransaction transaction) onFinishCheckout;
+  final Function(ABATransaction? transaction)? onFinishCheckout;
 
   /// ### METHOD: `onBeginCheckTransaction(ABATransaction transaction)`
   /// `Triggered when user completed transaction payment and current transaction will be started to check if it success or failed`
-  final Function(ABATransaction transaction) onBeginCheckTransaction;
+  final Function(ABATransaction? transaction)? onBeginCheckTransaction;
 
   /// ### METHOD: `onFinishCheckTransaction(ABATransaction transaction)`
   /// `Triggered when user completed transaction payment and current transaction checking event is finished`
-  final Function(ABATransaction transaction) onFinishCheckTransaction;
+  final Function(ABATransaction? transaction)? onFinishCheckTransaction;
 
-  final Function(int value, String msg) onCreatedTransaction;
+  final Function(int? value, String? msg)? onCreatedTransaction;
 
   /// ### METHOD: `onPaymentSuccess(ABATransaction transaction)`
   /// `Triggered when payment transaction was completed successfully`
   /// `User can route to another screen after successfully`
   /// #### `Default:` navigator to ABACheckoutSuccess()
-  final Function(ABATransaction transaction) onPaymentSuccess;
+  final Function(ABATransaction? transaction)? onPaymentSuccess;
 
   /// ### METHOD: `onPaymentFail(ABATransaction transaction)`
   /// `Triggered when payment transaction was uncompleted`
   /// `User can show any message`
   /// #### `Default:` toast bar will be showed to describe the problem
-  final Function(ABATransaction transaction) onPaymentFail;
+  final Function(ABATransaction? transaction)? onPaymentFail;
 
   const ABACheckoutContainer({
-    Key key,
-    @required this.amount,
-    @required this.shipping,
-    @required this.lastname,
-    @required this.firstname,
-    @required this.email,
-    @required this.phone,
+    Key? key,
+    required this.amount,
+    required this.shipping,
+    required this.lastname,
+    required this.firstname,
+    required this.email,
+    required this.phone,
     this.items = const [],
-    @required this.checkoutApiUrl,
-    @required this.merchant,
+    required this.checkoutApiUrl,
+    required this.merchant,
     this.enabled: false,
     this.checkoutLabel,
     this.onBeginCheckout,
@@ -108,12 +108,12 @@ class ABACheckoutContainer extends StatefulWidget {
     this.onPaymentSuccess,
     this.onPaymentFail,
   })  : assert(amount > 0),
-        assert(lastname != null),
-        assert(firstname != null),
-        assert(email != null),
-        assert(phone != null),
-        assert(checkoutApiUrl != null),
-        assert(merchant != null),
+        // assert(lastname != null),
+        // assert(firstname != null),
+        // assert(email != null),
+        // assert(phone != null),
+        // assert(checkoutApiUrl != null),
+        // assert(merchant != null),
         super(key: key);
   @override
   _ABACheckoutContainerState createState() => _ABACheckoutContainerState();
@@ -122,14 +122,14 @@ class ABACheckoutContainer extends StatefulWidget {
 class _ABACheckoutContainerState extends State<ABACheckoutContainer>
     with WidgetsBindingObserver {
   bool _requiredCheck = false;
-  ABATransaction _transaction;
-  String _error;
+  ABATransaction? _transaction;
+  String? _error;
 
   @override
   void initState() {
     _transaction = ABATransaction.instance(widget.merchant);
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
   }
 
   @override
@@ -161,8 +161,8 @@ class _ABACheckoutContainerState extends State<ABACheckoutContainer>
         mainAxisSize: MainAxisSize.min,
         children: [
           ABAPaymentLists(
-            value: _transaction.paymentOption,
-            onChanged: (v) => setState(() => _transaction.paymentOption = v),
+            value: _transaction!.paymentOption,
+            onChanged: (v) => setState(() => _transaction!.paymentOption = v),
           ),
           if (_error != null)
             Container(
@@ -195,13 +195,13 @@ class _ABACheckoutContainerState extends State<ABACheckoutContainer>
   _updateTransaction() {
     if (mounted) {
       setState(() {
-        _transaction.amount = widget.amount;
-        _transaction.firstname = widget.firstname;
-        _transaction.lastname = widget.lastname;
-        _transaction.email = widget.email;
-        _transaction.phone = widget.phone;
-        _transaction.shipping = widget.shipping;
-        _transaction.items = widget.items;
+        _transaction!.amount = widget.amount;
+        _transaction!.firstname = widget.firstname;
+        _transaction!.lastname = widget.lastname;
+        _transaction!.email = widget.email;
+        _transaction!.phone = widget.phone;
+        _transaction!.shipping = widget.shipping;
+        _transaction!.items = widget.items;
       });
     }
   }
@@ -212,8 +212,8 @@ class _ABACheckoutContainerState extends State<ABACheckoutContainer>
     _updateTransaction();
     widget.onBeginCheckout?.call(_transaction);
 
-    if (_transaction.paymentOption == AcceptPaymentOption.abapay_deeplink) {
-      var createResult = await _transaction.create();
+    if (_transaction!.paymentOption == AcceptPaymentOption.abapay_deeplink) {
+      var createResult = await _transaction!.create();
 
       widget.onFinishCheckout?.call(_transaction);
       ABAPayment.logger(createResult.toMap());
@@ -226,14 +226,14 @@ class _ABACheckoutContainerState extends State<ABACheckoutContainer>
 
         /// [open native using deeplink]
         if (createResult.abapayDeeplink != null) {
-          if (await canLaunch(createResult.abapayDeeplink)) {
+          if (await canLaunch(createResult.abapayDeeplink!)) {
             setState(() => _requiredCheck = true);
-            await launch(createResult.abapayDeeplink);
+            await launch(createResult.abapayDeeplink!);
           } else {
             if (Platform.isIOS) {
-              await launch(createResult.appStore);
+              await launch(createResult.appStore!);
             } else if (Platform.isAndroid) {
-              await launch(createResult.playStore);
+              await launch(createResult.playStore!);
             }
           }
         } else {
@@ -242,11 +242,10 @@ class _ABACheckoutContainerState extends State<ABACheckoutContainer>
       } else {
         Fluttertoast.showToast(msg: "${createResult.description}ff");
       }
-    } else if (_transaction.paymentOption == AcceptPaymentOption.cards ||
-        _transaction.paymentOption == AcceptPaymentOption.abapay) {
-      var map = _transaction.toMap();
-      var parsed = Uri.tryParse(widget.checkoutApiUrl);
-      assert(parsed != null);
+    } else if (_transaction!.paymentOption == AcceptPaymentOption.cards ||
+        _transaction!.paymentOption == AcceptPaymentOption.abapay) {
+      var map = _transaction!.toMap();
+      var parsed = Uri.tryParse(widget.checkoutApiUrl)!;
       Uri uri;
 
       /// `check if domain name contain https`
@@ -273,7 +272,7 @@ class _ABACheckoutContainerState extends State<ABACheckoutContainer>
   _checkTransaction() async {
     widget.onBeginCheckTransaction?.call(_transaction);
     ABAPayment.logger("===== begin checking transaction =====");
-    var checkResult = await _transaction.check();
+    var checkResult = await _transaction!.check();
     setState(() => _requiredCheck = false);
     widget.onFinishCheckTransaction?.call(_transaction);
     ABAPayment.logger("===== finish checking transaction =====");
@@ -281,19 +280,19 @@ class _ABACheckoutContainerState extends State<ABACheckoutContainer>
       ABAPayment.logger.error("checkResult.status");
       assert(checkResult.status == 0);
       if (widget.onPaymentSuccess != null) {
-        widget.onPaymentSuccess.call(_transaction);
+        widget.onPaymentSuccess!.call(_transaction);
       } else {
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (_) => ABACheckoutSuccess()));
       }
     } else {
       if (widget.onPaymentFail != null) {
-        widget.onPaymentFail.call(_transaction);
+        widget.onPaymentFail!.call(_transaction);
       } else {
         if (checkResult.status == 6) {
           Fluttertoast.showToast(msg: "please try again");
         } else {
-          await Fluttertoast.showToast(msg: checkResult.description);
+          await Fluttertoast.showToast(msg: checkResult.description!);
         }
       }
     }

@@ -5,9 +5,9 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class ABACheckoutWebView extends StatefulWidget {
   final ABAMerchant merchant;
-  final Uri uri;
+  final Uri? uri;
 
-  const ABACheckoutWebView({Key key, this.uri, @required this.merchant})
+  const ABACheckoutWebView({Key? key, this.uri, required this.merchant})
       : super(key: key);
   @override
   _ABACheckoutWebViewState createState() => _ABACheckoutWebViewState();
@@ -15,7 +15,7 @@ class ABACheckoutWebView extends StatefulWidget {
 
 class _ABACheckoutWebViewState extends State<ABACheckoutWebView> {
   final GlobalKey webViewKey = GlobalKey();
-  InAppWebViewController webViewController;
+  late InAppWebViewController webViewController;
 
   InAppWebViewGroupOptions options = InAppWebViewGroupOptions(
     crossPlatform: InAppWebViewOptions(cacheEnabled: true),
@@ -23,7 +23,7 @@ class _ABACheckoutWebViewState extends State<ABACheckoutWebView> {
         useHybridComposition: true, thirdPartyCookiesEnabled: true),
     ios: IOSInAppWebViewOptions(sharedCookiesEnabled: true),
   );
-  PullToRefreshController pullToRefreshController;
+  PullToRefreshController? pullToRefreshController;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class _ABACheckoutWebViewState extends State<ABACheckoutWebView> {
           webViewController = controller;
           webViewController.loadUrl(
             urlRequest: URLRequest(url: widget.uri, headers: {
-              "Referer": widget.merchant.refererDomain,
+              "Referer": widget.merchant.refererDomain!,
             }),
           );
         },
