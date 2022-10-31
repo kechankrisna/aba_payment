@@ -6,7 +6,7 @@ description: Demonstrates how to use the aba_payment plugin.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=2.14.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -44,6 +44,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
   - .env
+  - packages/flutter_inappwebview/assets/web/web_support.js
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -17,12 +17,6 @@ class _ABACheckoutWebViewState extends State<ABACheckoutWebView> {
   final GlobalKey webViewKey = GlobalKey();
   late InAppWebViewController webViewController;
 
-  InAppWebViewGroupOptions options = InAppWebViewGroupOptions(
-    crossPlatform: InAppWebViewOptions(cacheEnabled: true),
-    android: AndroidInAppWebViewOptions(
-        useHybridComposition: true, thirdPartyCookiesEnabled: true),
-    ios: IOSInAppWebViewOptions(sharedCookiesEnabled: true),
-  );
   PullToRefreshController? pullToRefreshController;
 
   @override
@@ -34,11 +28,16 @@ class _ABACheckoutWebViewState extends State<ABACheckoutWebView> {
       ),
       body: InAppWebView(
         pullToRefreshController: pullToRefreshController,
-        initialOptions: options,
+        initialSettings: InAppWebViewSettings(
+          cacheEnabled: true,
+          useHybridComposition: true,
+          thirdPartyCookiesEnabled: true,
+          sharedCookiesEnabled: true
+        ),
         onWebViewCreated: (controller) {
           webViewController = controller;
           webViewController.loadUrl(
-            urlRequest: URLRequest(url: widget.uri, headers: {
+            urlRequest: URLRequest(url: WebUri.uri(widget.uri!), headers: {
               "Referer": widget.merchant.refererDomain!,
             }),
           );

@@ -1,5 +1,6 @@
-import 'dart:io';
+import 'dart:io' as io;
 import 'package:aba_payment/service/strings.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:aba_payment/enumeration.dart';
 
@@ -56,40 +57,42 @@ class _ABAPaymentListsState extends State<ABAPaymentLists> {
                 : Icon(Icons.lens_outlined),
             onTap: () => _onTap(AcceptPaymentOption.cards),
           ),
-          if (Platform.isLinux || Platform.isWindows || Platform.isMacOS)
-            ListTile(
-              leading: Image(
-                image:
-                    AssetImage("assets/images/ic_payway.png", package: package),
-                width: 55,
-              ),
-              title: Text(Strings.abaPaywayLabel),
-              subtitle: Text(Strings.scanToPayWithABAMobileLabel),
-              trailing: _value == AcceptPaymentOption.abapay
-                  ? Icon(
-                      Icons.check_circle_outline_rounded,
-                      color: Colors.green,
-                    )
-                  : Icon(Icons.lens_outlined),
-              onTap: () => _onTap(AcceptPaymentOption.abapay),
-            ),
-          if (Platform.isAndroid || Platform.isIOS)
-            ListTile(
-              leading: Image(
-                image:
-                    AssetImage("assets/images/ic_payway.png", package: package),
-                width: 55,
-              ),
-              title: Text(Strings.abaPayLabel),
-              subtitle: Text(Strings.tapToPayWithABAMobileLabel),
-              trailing: _value == AcceptPaymentOption.abapay_deeplink
-                  ? Icon(
-                      Icons.check_circle_outline_rounded,
-                      color: Colors.green,
-                    )
-                  : Icon(Icons.lens_outlined),
-              onTap: () => _onTap(AcceptPaymentOption.abapay_deeplink),
-            ),
+          (kIsWeb ||
+                  io.Platform.isMacOS ||
+                  io.Platform.isWindows ||
+                  io.Platform.isLinux)
+              ? ListTile(
+                  leading: Image(
+                    image: AssetImage("assets/images/ic_payway.png",
+                        package: package),
+                    width: 55,
+                  ),
+                  title: Text(Strings.abaPaywayLabel),
+                  subtitle: Text(Strings.scanToPayWithABAMobileLabel),
+                  trailing: _value == AcceptPaymentOption.abapay
+                      ? Icon(
+                          Icons.check_circle_outline_rounded,
+                          color: Colors.green,
+                        )
+                      : Icon(Icons.lens_outlined),
+                  onTap: () => _onTap(AcceptPaymentOption.abapay),
+                )
+              : ListTile(
+                  leading: Image(
+                    image: AssetImage("assets/images/ic_payway.png",
+                        package: package),
+                    width: 55,
+                  ),
+                  title: Text(Strings.abaPayLabel),
+                  subtitle: Text(Strings.tapToPayWithABAMobileLabel),
+                  trailing: _value == AcceptPaymentOption.abapay_deeplink
+                      ? Icon(
+                          Icons.check_circle_outline_rounded,
+                          color: Colors.green,
+                        )
+                      : Icon(Icons.lens_outlined),
+                  onTap: () => _onTap(AcceptPaymentOption.abapay_deeplink),
+                ),
         ],
       ),
     );

@@ -5,7 +5,7 @@ import 'package:aba_payment/extension.dart';
 import 'package:aba_payment/model/aba_mechant.dart';
 import 'package:aba_payment/model/aba_payment.dart';
 import 'package:aba_payment/model/aba_transacition_item.dart';
-import 'package:aba_payment/service/aba_client_helper.dart';
+import 'package:aba_payment/service/aba_client_service.dart';
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 
@@ -92,7 +92,9 @@ class ABATransaction {
 
   double get totalPrice {
     double result = 0;
-    this.items!.fold(result, (dynamic pre, e) => result += e.price! * e.quantity!);
+    this
+        .items!
+        .fold(result, (dynamic pre, e) => result += e.price! * e.quantity!);
     return result;
   }
 
@@ -113,7 +115,7 @@ class ABATransaction {
     }
     var _currency = "USD";
     var _type = "purchase";
-    String _hash = ABAClientHelper(merchant).getHash(
+    String _hash = ABAClientService(merchant).getHash(
       reqTime: reqTime,
       tranID: tranID!,
       amount: "$amount",
@@ -164,8 +166,8 @@ class ABATransaction {
     map["type"] = "purchase";
     var formData = FormData.fromMap(map);
     try {
-      var helper = ABAClientHelper(merchant);
-      var dio = helper.getDio();
+      var helper = ABAClientService(merchant);
+      var dio = helper.client;
       Response<String> response = await dio.post("/purchase", data: formData);
       // ABAPayment.logger.debug(response);
       var map = json.decode(response.data!) as Map<String, dynamic>;
@@ -173,7 +175,7 @@ class ABATransaction {
       return res;
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
-      res.description = ABAClientHelper.handleResponseError(error);
+      res.description = ABAClientService.handleResponseError(error);
     }
     return ABAServerResponse();
   }
@@ -184,25 +186,25 @@ class ABATransaction {
     var res = ABAServerResponse(status: 11);
     final _reqTime = reqTime;
     var hash =
-        ABAClientHelper(merchant).getHash(reqTime: _reqTime, tranID: tranID!);
+        ABAClientService(merchant).getHash(reqTime: _reqTime, tranID: tranID!);
     var form = FormData.fromMap({
       "req_time": _reqTime,
       "tran_id": tranID,
       "hash": hash,
       "merchant_id": this.merchant!.merchantID,
     });
-    var helper = ABAClientHelper(merchant);
+    var helper = ABAClientService(merchant);
     ABAPayment.logger.error("tid $tranID");
     try {
       Response<String> response =
-          await helper.getDio().post("/check-transaction", data: form);
+          await helper.client.post("/check-transaction", data: form);
       var map = json.decode(response.data!) as Map<String, dynamic>;
       ABAPayment.logger.error("checkMap $map $response");
       res = ABAServerResponse.fromMap(map);
       return res;
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
-      res.description = ABAClientHelper.handleResponseError(error);
+      res.description = ABAClientService.handleResponseError(error);
     }
     return ABAServerResponse();
   }

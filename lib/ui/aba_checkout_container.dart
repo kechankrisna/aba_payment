@@ -1,12 +1,10 @@
-import 'dart:io';
+import 'dart:io' as io;
 import 'package:aba_payment/enumeration.dart';
 import 'package:aba_payment/model.dart';
-// import 'package:aba_payment/model/aba_transacition_item.dart';
 import 'package:aba_payment/service/strings.dart';
 import 'package:aba_payment/ui/aba_checkout_success.dart';
 import 'package:aba_payment/ui/aba_checkout_webview.dart';
 import 'package:flutter/material.dart';
-// import 'package:aba_payment/model/aba_transaction.dart';
 import 'package:aba_payment/ui/aba_payment_lists.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -129,12 +127,12 @@ class _ABACheckoutContainerState extends State<ABACheckoutContainer>
   void initState() {
     _transaction = ABATransaction.instance(widget.merchant);
     super.initState();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -230,9 +228,9 @@ class _ABACheckoutContainerState extends State<ABACheckoutContainer>
             setState(() => _requiredCheck = true);
             await launch(createResult.abapayDeeplink!);
           } else {
-            if (Platform.isIOS) {
+            if (io.Platform.isIOS) {
               await launch(createResult.appStore!);
-            } else if (Platform.isAndroid) {
+            } else if (io.Platform.isAndroid) {
               await launch(createResult.playStore!);
             }
           }
