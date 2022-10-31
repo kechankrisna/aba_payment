@@ -1,5 +1,6 @@
 import 'package:aba_payment/model/aba_mechant.dart';
 import 'package:aba_payment/service/strings.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
@@ -29,17 +30,17 @@ class _ABACheckoutWebViewState extends State<ABACheckoutWebView> {
       body: InAppWebView(
         pullToRefreshController: pullToRefreshController,
         initialSettings: InAppWebViewSettings(
-          cacheEnabled: true,
-          useHybridComposition: true,
-          thirdPartyCookiesEnabled: true,
-          sharedCookiesEnabled: true
-        ),
+            cacheEnabled: true,
+            useHybridComposition: true,
+            thirdPartyCookiesEnabled: true,
+            sharedCookiesEnabled: true),
         onWebViewCreated: (controller) {
           webViewController = controller;
+          final Map<String, String> headers =
+              kIsWeb ? {} : {"Referer": widget.merchant.refererDomain!};
           webViewController.loadUrl(
-            urlRequest: URLRequest(url: WebUri.uri(widget.uri!), headers: {
-              "Referer": widget.merchant.refererDomain!,
-            }),
+            urlRequest:
+                URLRequest(url: WebUri.uri(widget.uri!), headers: headers),
           );
         },
       ),
