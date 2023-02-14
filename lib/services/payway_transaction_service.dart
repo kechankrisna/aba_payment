@@ -10,9 +10,10 @@ class PaywayTransactionService {
 
   PaywayTransactionService._();
 
-  static void ensureInitialized(ABAMerchant merchant) {
+  static PaywayTransactionService ensureInitialized(ABAMerchant merchant) {
     PaywayTransactionService.instance ??= PaywayTransactionService._();
     PaywayTransactionService.instance!.initialize(merchant);
+    return PaywayTransactionService.instance!;
   }
 
   void initialize(ABAMerchant merchant) {
