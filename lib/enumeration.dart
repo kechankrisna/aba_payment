@@ -1,9 +1,12 @@
-enum ABAPaymentOption { cards, abapay, abapay_deeplink }
+enum ABAPaymentOption { cards, abapay, abapay_deeplink, bakong, alipay, wechat }
 
 const $ABAPaymentOptionMap = const {
   "cards": ABAPaymentOption.cards,
   "abapay": ABAPaymentOption.abapay,
   "abapay_deeplink": ABAPaymentOption.abapay_deeplink,
+  "bakong": ABAPaymentOption.bakong,
+  "alipay": ABAPaymentOption.alipay,
+  "wechat": ABAPaymentOption.wechat,
 };
 
 /// acceptable currency
