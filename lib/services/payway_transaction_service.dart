@@ -1,12 +1,13 @@
 import 'dart:convert';
-import 'package:crypto/crypto.dart' as crypto;
+import 'package:aba_payment/model/payway_check_transaction.dart';
+import 'package:aba_payment/model/payway_create_transaction.dart';
 import 'package:aba_payment/model.dart';
 import 'package:aba_payment/services/services.dart';
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 
-import '../model/payway_create_transaction.dart';
-import 'payway_client_response_service.dart';
+import 'reponses/payway_check_transaction_response.dart';
+import 'reponses/payway_create_transaction_response.dart';
 
 class PaywayTransactionService {
   static PaywayTransactionService? instance;
@@ -37,9 +38,9 @@ class PaywayTransactionService {
   String uniqueTranID() => "${DateTime.now().microsecondsSinceEpoch}";
   String uniqueReqTime() => "${DateFormat("yMddHms").format(DateTime.now())}";
 
-  /// ## [createPurchase]
+  /// ## [createTransaction]
   /// create a new trasaction
-  Future<PaywayCreateTransactionResponse> createPurchase(
+  Future<PaywayCreateTransactionResponse> createTransaction(
       {required PaywayCreateTransaction transaction}) async {
     var res = PaywayCreateTransactionResponse(status: 11);
     Map<String, dynamic> map = transaction.toFormDataMap();
@@ -61,41 +62,37 @@ class PaywayTransactionService {
     return res;
   }
 
-  /// /// ## [check]
-  /// /// check the current status of this transaction vai its id
-  /// Future<ABAServerResponse> check(
-  ///     {required String tranID, required String reqTime}) async {
-  ///   var res = ABAServerResponse(status: 11);
+  /// ## [checkTransaction]
+  /// check the current status of this transaction vai its id
+  Future<PaywayCheckTransactionResponse> checkTransaction(
+      {required PaywayCheckTransaction transaction}) async {
+    var res = PaywayCheckTransactionResponse(status: 11);
+    Map<String, dynamic> map = transaction.toFormDataMap();
+    var formData = FormData.fromMap(map);
 
-  ///   var hash = this.getHash(reqTime: reqTime, tranID: tranID);
-  ///   var form = FormData.fromMap({
-  ///     "req_time": reqTime,
-  ///     "tran_id": tranID,
-  ///     "hash": hash,
-  ///     "merchant_id": this.merchant!.merchantID,
-  ///   });
-  ///   var helper = ABAClientService(merchant);
-  ///   ABAPayment.logger.error("tid $tranID");
-  ///   try {
-  ///     Response<String> response =
-  ///         await helper.client.post("/check-transaction", data: form);
-  ///     var map = json.decode(response.data!) as Map<String, dynamic>;
-  ///     ABAPayment.logger.error("checkMap $map $response");
-  ///     res = ABAServerResponse.fromMap(map);
-  ///     return res;
-  ///   } catch (error, stacktrace) {
-  ///     print("Exception occured: $error stackTrace: $stacktrace");
-  ///     res.description = ABAClientService.handleResponseError(error);
-  ///   }
-  ///   return ABAServerResponse();
-  /// }
+    try {
+      if (helper == null) return PaywayCheckTransactionResponse();
+      final client = helper!.client;
+      client.interceptors.add(dioLoggerInterceptor);
+      Response<String> response =
+          await client.post("/check-transaction", data: formData);
 
-  /// /// ## [isValidate]
-  /// /// will return true if transaction completed
-  /// /// otherwise false
-  /// Future<bool> isValidate(
-  ///     {required String tranID, required String reqTime}) async {
-  ///   var result = await check(tranID: tranID, reqTime: reqTime);
-  ///   return (result.status == 0);
-  /// }
+      var map = json.decode(response.data!) as Map<String, dynamic>;
+      res = PaywayCheckTransactionResponse.fromMap(map);
+      return res;
+    } catch (error, stacktrace) {
+      print("Exception occured: $error stackTrace: $stacktrace");
+      res.description = ABAClientService.handleResponseError(error);
+    }
+    return res;
+  }
+
+  /// ## [isValidate]
+  /// will return true if transaction completed
+  /// otherwise false
+  Future<bool> isTransactionCompleted(
+      {required PaywayCheckTransaction transaction}) async {
+    var result = await this.checkTransaction(transaction: transaction);
+    return (result.status == 0);
+  }
 }
