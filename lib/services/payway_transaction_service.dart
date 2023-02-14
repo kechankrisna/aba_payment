@@ -46,8 +46,9 @@ class PaywayTransactionService {
           _transaction.copyWith(option: ABAPaymentOption.abapay_deeplink);
     }
     assert([ABAPaymentOption.abapay_deeplink].contains(_transaction.option));
-    Map<String, dynamic> map = transaction.toFormDataMap();
-    var formData = FormData.fromMap(map);
+    Map<String, dynamic> map = _transaction.toFormDataMap();
+    debugPrint(json.encode(map));
+    var formData = FormData.fromMap(map); 
     try {
       if (helper == null) return PaywayCreateTransactionResponse();
       final client = helper!.client;
