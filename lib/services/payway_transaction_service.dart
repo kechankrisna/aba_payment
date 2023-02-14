@@ -39,7 +39,8 @@ class PaywayTransactionService {
   /// ## [createTransaction]
   /// create a new trasaction
   Future<PaywayCreateTransactionResponse> createTransaction(
-      {required PaywayCreateTransaction transaction}) async {
+      {required PaywayCreateTransaction transaction,
+      bool enabledLogger = false}) async {
     var res = PaywayCreateTransactionResponse(status: 11);
     var _transaction = transaction;
     if (![ABAPaymentOption.abapay_deeplink].contains(transaction.option)) {
@@ -48,17 +49,22 @@ class PaywayTransactionService {
     }
     assert([ABAPaymentOption.abapay_deeplink].contains(_transaction.option));
     Map<String, dynamic> map = _transaction.toFormDataMap();
-    debugPrint(json.encode(map));
+
     var formData = FormData.fromMap(map);
     try {
       if (helper == null) return PaywayCreateTransactionResponse();
       final client = helper!.client;
-      client.interceptors.add(dioLoggerInterceptor);
+
+      if (enabledLogger) {
+        debugPrint(json.encode(map));
+        client.interceptors.add(dioLoggerInterceptor);
+      }
+
       Response<String> response =
           await client.post("/purchase", data: formData);
 
-      var map = json.decode(response.data!) as Map<String, dynamic>;
-      res = PaywayCreateTransactionResponse.fromMap(map);
+      var _map = json.decode(response.data!) as Map<String, dynamic>;
+      res = PaywayCreateTransactionResponse.fromMap(_map);
       return res;
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
@@ -95,7 +101,8 @@ class PaywayTransactionService {
   /// ## [checkTransaction]
   /// check the current status of this transaction vai its id
   Future<PaywayCheckTransactionResponse> checkTransaction(
-      {required PaywayCheckTransaction transaction}) async {
+      {required PaywayCheckTransaction transaction,
+      bool enabledLogger = false}) async {
     var res = PaywayCheckTransactionResponse(status: 11);
     Map<String, dynamic> map = transaction.toFormDataMap();
     var formData = FormData.fromMap(map);
@@ -103,12 +110,17 @@ class PaywayTransactionService {
     try {
       if (helper == null) return PaywayCheckTransactionResponse();
       final client = helper!.client;
-      client.interceptors.add(dioLoggerInterceptor);
+
+      if (enabledLogger) {
+        debugPrint(json.encode(map));
+        client.interceptors.add(dioLoggerInterceptor);
+      }
+
       Response<String> response =
           await client.post("/check-transaction", data: formData);
 
-      var map = json.decode(response.data!) as Map<String, dynamic>;
-      res = PaywayCheckTransactionResponse.fromMap(map);
+      var _map = json.decode(response.data!) as Map<String, dynamic>;
+      res = PaywayCheckTransactionResponse.fromMap(_map);
       return res;
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
