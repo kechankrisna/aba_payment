@@ -42,6 +42,12 @@ class PaywayTransactionService {
   Future<PaywayCreateTransactionResponse> createTransaction(
       {required PaywayCreateTransaction transaction}) async {
     var res = PaywayCreateTransactionResponse(status: 11);
+    var _transaction = transaction;
+    if (![ABAPaymentOption.abapay_deeplink].contains(transaction.option)) {
+      _transaction =
+          _transaction.copyWith(option: ABAPaymentOption.abapay_deeplink);
+    }
+    assert([ABAPaymentOption.abapay_deeplink].contains(_transaction.option));
     Map<String, dynamic> map = transaction.toFormDataMap();
     var formData = FormData.fromMap(map);
     try {
@@ -66,9 +72,17 @@ class PaywayTransactionService {
     required String checkoutApiUrl,
   }) async {
     assert(checkoutApiUrl.isNotEmpty);
-    assert([ABAPaymentOption.cards, ABAPaymentOption.abapay]
-        .contains(transaction.option));
-    Map<String, dynamic> map = transaction.toFormDataMap();
+    var _transaction = transaction;
+    if (![ABAPaymentOption.cards, ABAPaymentOption.abapay]
+        .contains(transaction.option)) {
+      _transaction = _transaction.copyWith(option: ABAPaymentOption.cards);
+    }
+
+    assert([
+      ABAPaymentOption.cards,
+      ABAPaymentOption.abapay,
+    ].contains(_transaction.option));
+    Map<String, dynamic> map = _transaction.toFormDataMap();
 
     var parsed = Uri.tryParse(checkoutApiUrl)!;
 
