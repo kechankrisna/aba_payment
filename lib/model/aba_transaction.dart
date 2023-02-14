@@ -25,8 +25,6 @@ class ABATransaction {
   String? returnUrl;
   String? continueSuccessUrl;
   String? returnParams;
-  String? phoneCountryCode;
-  String? preAuth;
   double? shipping;
   ABAPaymentOption option;
   ABATransactionType type;
@@ -45,8 +43,6 @@ class ABATransaction {
     this.returnUrl,
     this.continueSuccessUrl,
     this.returnParams,
-    this.phoneCountryCode,
-    this.preAuth,
     this.shipping = 0.00,
     this.option = ABAPaymentOption.cards,
     this.type = ABATransactionType.purchase,
@@ -86,9 +82,7 @@ class ABATransaction {
       returnUrl: map["return_url"],
       continueSuccessUrl: map["continue_success_url"],
       returnParams: map["return_params"],
-      phoneCountryCode: map["phone_country_code"],
-      preAuth: "PreAuth",
-      shipping: map["shipping"] ?? "" as double?,
+      shipping: map["shipping"] ?? 0.00,
       option:
           $ABAPaymentOptionMap[map["payment_option"]] ?? ABAPaymentOption.cards,
       type: $ABATransactionTypeMap[map["type"]] ?? ABATransactionType.purchase,
@@ -132,26 +126,23 @@ class ABATransaction {
   /// [return] map object
   Map<String, dynamic> toMap() {
     var map = {
-      "merchant_id": "${merchant!.merchantID}",
+      "merchant_id": merchant!.merchantID,
       "req_time": reqTime,
       "tran_id": tranID,
-      "amount": amount.toString(),
-      "items": encodedItem.toString(),
+      "amount": amount,
+      "items": encodedItem,
       "hash": hash,
-      "firstname": firstname.toString(),
-      "lastname": lastname.toString(),
-      "phone": phone.toString(),
-      "email": email.toString(),
+      "firstname": firstname,
+      "lastname": lastname,
+      "phone": phone,
+      "email": email,
       "return_url": encodedReturnUrl,
       "continue_success_url": continueSuccessUrl ?? "",
       "return_params": returnParams ?? "",
-      // "return_params": {"tran_id": tranID, "status": 0},
-      // "phone_country_code": phoneCountryCode ?? "855",
-      // "PreAuth": preAuth,
-      "shipping": shipping.toString(),
-      "type": type.name.toString(),
-      "payment_option": option.name.toString(),
-      "currency": currency.name.toString(),
+      "shipping": shipping,
+      "type": type.name,
+      "payment_option": option.name,
+      "currency": currency.name,
     };
     return map;
   }
@@ -171,9 +162,6 @@ class ABATransaction {
       "return_url": encodedReturnUrl,
       "continue_success_url": continueSuccessUrl ?? "",
       "return_params": returnParams ?? "",
-      // "return_params": {"tran_id": tranID, "status": 0},
-      // "phone_country_code": phoneCountryCode ?? "855",
-      // "PreAuth": preAuth,
       "shipping": shipping.toString(),
       "type": type.name.toString(),
       "payment_option": option.name.toString(),
@@ -186,7 +174,7 @@ class ABATransaction {
   /// create a new trasaction
   Future<ABAServerResponse> create() async {
     var res = ABAServerResponse(status: 11);
-    Map<String, dynamic> map = this.toMap();
+    Map<String, dynamic> map = this.toEncodedMap();
     map["type"] = "purchase";
     var formData = FormData.fromMap(map);
     try {
