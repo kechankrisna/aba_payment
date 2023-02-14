@@ -141,8 +141,8 @@ class _TestScreenState extends State<TestScreen> {
                     firstname: 'Miss',
                     lastname: 'My Lekha',
                     phone: '010464144',
-                    option: ABAPaymentOption.abapay_deeplink,
-                    shipping: 0.0,
+                    option: ABAPaymentOption.abapay,
+                    shipping: 0.00,
                     returnUrl: "https://stage.mylekha.app");
                 var uri = await service.generateTransactionCheckoutURI(
                   transaction: _transaction,
@@ -150,7 +150,7 @@ class _TestScreenState extends State<TestScreen> {
                 );
                 print("url ${uri}");
               },
-              child: Text("generante url"))
+              child: Text("generante uri"))
         ],
       ),
     );

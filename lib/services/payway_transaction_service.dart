@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:aba_payment/enumeration.dart';
 import 'package:aba_payment/models/models.dart';
 import 'package:aba_payment/services/services.dart';
 import 'package:dio/dio.dart';
@@ -64,8 +65,11 @@ class PaywayTransactionService {
     required PaywayCreateTransaction transaction,
     required String checkoutApiUrl,
   }) async {
-    Map<String, dynamic> map = transaction.toFormDataMap();
     assert(checkoutApiUrl.isNotEmpty);
+    assert([ABAPaymentOption.cards, ABAPaymentOption.abapay]
+        .contains(transaction.option));
+    Map<String, dynamic> map = transaction.toFormDataMap();
+
     var parsed = Uri.tryParse(checkoutApiUrl)!;
 
     return parsed.authority.contains("https")
