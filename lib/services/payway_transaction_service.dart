@@ -5,9 +5,6 @@ import 'package:aba_payment/services/services.dart';
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 
-import 'reponses/payway_check_transaction_response.dart';
-import 'reponses/payway_create_transaction_response.dart';
-
 class PaywayTransactionService {
   static PaywayTransactionService? instance;
 
