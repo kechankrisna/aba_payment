@@ -49,7 +49,7 @@ class PaywayTransactionService {
       final client = helper!.client;
       client.interceptors.add(dioLoggerInterceptor);
       Response<String> response =
-          await client.post("/purchass", data: formData);
+          await client.post("/purchase", data: formData);
 
       var map = json.decode(response.data!) as Map<String, dynamic>;
       res = PaywayCreateTransactionResponse.fromMap(map);
