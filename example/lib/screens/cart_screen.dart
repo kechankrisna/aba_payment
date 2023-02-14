@@ -31,9 +31,9 @@ class _CartScreenState extends State<CartScreen> {
         _phone = "010464144";
         _email = "support@mylekha.app";
         _items = [
-          ABATransactionItem(name: "item 1", price: 1, quantity: 1),
-          ABATransactionItem(name: "item 2", price: 2, quantity: 1),
-          ABATransactionItem(name: "item 3", price: 3, quantity: 1),
+          ABATransactionItem(name: "ទំនិញ 1", price: 1, quantity: 1),
+          ABATransactionItem(name: "ទំនិញ 2", price: 2, quantity: 1),
+          ABATransactionItem(name: "ទំនិញ 3", price: 3, quantity: 1),
         ];
       });
     }
