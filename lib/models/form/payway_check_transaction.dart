@@ -1,11 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
-
-import 'package:aba_payment/enumeration.dart';
 import 'package:aba_payment/services/services.dart';
-
-import 'aba_mechant.dart';
-import 'payway_transacition_item.dart';
 
 extension PaywayCheckTransactionExt on PaywayCheckTransaction {
   String get hash {
@@ -59,7 +53,7 @@ class PaywayCheckTransaction {
     required this.reqTime,
   });
 
-  factory PaywayCheckTransaction.instance(ABAMerchant merchant) {
+  factory PaywayCheckTransaction.instance() {
     // var format = DateFormat("yMddHms").format(DateTime.now()); //2021 01 23 234559 OR 2021 11 07 132947
     final now = DateTime.now();
     return PaywayCheckTransaction(

@@ -1,7 +1,5 @@
 import 'dart:convert';
-import 'package:aba_payment/model/payway_check_transaction.dart';
-import 'package:aba_payment/model/payway_create_transaction.dart';
-import 'package:aba_payment/model.dart';
+import 'package:aba_payment/models/models.dart';
 import 'package:aba_payment/services/services.dart';
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';

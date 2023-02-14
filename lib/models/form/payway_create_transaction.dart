@@ -1,10 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
-
 import 'package:aba_payment/enumeration.dart';
 import 'package:aba_payment/services/services.dart';
-
-import 'aba_mechant.dart';
 import 'payway_transacition_item.dart';
 
 extension PaywayCreateTransactionExt on PaywayCreateTransaction {
@@ -109,7 +106,7 @@ class PaywayCreateTransaction {
     this.currency = ABATransactionCurrency.USD,
   });
 
-  factory PaywayCreateTransaction.instance(ABAMerchant merchant) {
+  factory PaywayCreateTransaction.instance() {
     // var format = DateFormat("yMddHms").format(DateTime.now()); //2021 01 23 234559 OR 2021 11 07 132947
     final now = DateTime.now();
     return PaywayCreateTransaction(

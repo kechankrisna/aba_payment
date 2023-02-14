@@ -1,15 +1,11 @@
 import 'dart:convert';
-
-import 'package:aba_payment/enumeration.dart';
-import 'package:aba_payment/extension.dart';
-import 'package:aba_payment/model/aba_mechant.dart';
-import 'package:aba_payment/model/aba_payment.dart';
-import 'package:aba_payment/model/aba_transacition_item.dart';
-import 'package:aba_payment/services/services.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
-
+import 'package:aba_payment/enumeration.dart';
+import 'package:aba_payment/models/models.dart';
+import 'package:aba_payment/services/services.dart';
+import 'aba_transaction_item.dart';
 import 'aba_server_response.dart';
 
 class ABATransaction {
@@ -208,12 +204,12 @@ class ABATransaction {
       "merchant_id": this.merchant!.merchantID,
     });
     var helper = ABAClientService(merchant);
-    ABAPayment.logger.error("tid $tranID");
+
     try {
       Response<String> response =
           await helper.client.post("/check-transaction", data: form);
       var map = json.decode(response.data!) as Map<String, dynamic>;
-      ABAPayment.logger.error("checkMap $map $response");
+
       res = ABAServerResponse.fromMap(map);
       return res;
     } catch (error, stacktrace) {
@@ -229,5 +225,83 @@ class ABATransaction {
   Future<bool> validate() async {
     var result = await this.check();
     return (result.status == 0);
+  }
+
+  ABATransaction copyWith({
+    ABAMerchant? merchant,
+    String? tranID,
+    String? reqTime,
+    double? amount,
+    List<ABATransactionItem>? items,
+    String? firstname,
+    String? lastname,
+    String? phone,
+    String? email,
+    String? returnUrl,
+    String? continueSuccessUrl,
+    String? returnParams,
+    double? shipping,
+    ABAPaymentOption? option,
+  }) {
+    return ABATransaction(
+      merchant: merchant ?? this.merchant,
+      tranID: tranID ?? this.tranID,
+      reqTime: reqTime ?? this.reqTime,
+      amount: amount ?? this.amount,
+      items: items ?? this.items,
+      firstname: firstname ?? this.firstname,
+      lastname: lastname ?? this.lastname,
+      phone: phone ?? this.phone,
+      email: email ?? this.email,
+      returnUrl: returnUrl ?? this.returnUrl,
+      continueSuccessUrl: continueSuccessUrl ?? this.continueSuccessUrl,
+      returnParams: returnParams ?? this.returnParams,
+      shipping: shipping ?? this.shipping,
+      option: option ?? this.option,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'ABATransaction(merchant: $merchant, tranID: $tranID, reqTime: $reqTime, amount: $amount, items: $items, firstname: $firstname, lastname: $lastname, phone: $phone, email: $email, returnUrl: $returnUrl, continueSuccessUrl: $continueSuccessUrl, returnParams: $returnParams, shipping: $shipping, option: $option)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is ABATransaction &&
+        other.merchant == merchant &&
+        other.tranID == tranID &&
+        other.reqTime == reqTime &&
+        other.amount == amount &&
+        listEquals(other.items, items) &&
+        other.firstname == firstname &&
+        other.lastname == lastname &&
+        other.phone == phone &&
+        other.email == email &&
+        other.returnUrl == returnUrl &&
+        other.continueSuccessUrl == continueSuccessUrl &&
+        other.returnParams == returnParams &&
+        other.shipping == shipping &&
+        other.option == option;
+  }
+
+  @override
+  int get hashCode {
+    return merchant.hashCode ^
+        tranID.hashCode ^
+        reqTime.hashCode ^
+        amount.hashCode ^
+        items.hashCode ^
+        firstname.hashCode ^
+        lastname.hashCode ^
+        phone.hashCode ^
+        email.hashCode ^
+        returnUrl.hashCode ^
+        continueSuccessUrl.hashCode ^
+        returnParams.hashCode ^
+        shipping.hashCode ^
+        option.hashCode;
   }
 }
