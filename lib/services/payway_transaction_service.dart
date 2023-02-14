@@ -60,6 +60,19 @@ class PaywayTransactionService {
     return res;
   }
 
+  Future<Uri> generateTransactionCheckoutURI({
+    required PaywayCreateTransaction transaction,
+    required String checkoutApiUrl,
+  }) async {
+    Map<String, dynamic> map = transaction.toFormDataMap();
+    assert(checkoutApiUrl.isNotEmpty);
+    var parsed = Uri.tryParse(checkoutApiUrl)!;
+
+    return parsed.authority.contains("https")
+        ? Uri.https(parsed.authority, parsed.path, map)
+        : Uri.http(parsed.authority, parsed.path, map);
+  }
+
   /// ## [checkTransaction]
   /// check the current status of this transaction vai its id
   Future<PaywayCheckTransactionResponse> checkTransaction(
