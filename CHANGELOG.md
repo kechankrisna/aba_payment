@@ -1,3 +1,7 @@
+## 0.0.4
+* breaking change while adding service
+* encoded and decoded list of unicode item
+
 ## 0.0.3
 
 * null-safety
