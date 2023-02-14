@@ -1,5 +1,5 @@
 import 'dart:io' as io;
-import 'package:aba_payment/service/strings.dart';
+import 'package:aba_payment/services/strings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:aba_payment/enumeration.dart';

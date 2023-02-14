@@ -1,4 +1,4 @@
-import 'package:aba_payment/service/strings.dart';
+import 'package:aba_payment/services/strings.dart';
 import 'package:flutter/material.dart';
 
 class ABACheckoutSuccess extends StatelessWidget {

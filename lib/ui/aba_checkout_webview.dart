@@ -1,5 +1,5 @@
 import 'package:aba_payment/model/aba_mechant.dart';
-import 'package:aba_payment/service/strings.dart';
+import 'package:aba_payment/services/strings.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';

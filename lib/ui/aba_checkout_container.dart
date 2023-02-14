@@ -1,7 +1,7 @@
 import 'dart:io' as io;
 import 'package:aba_payment/enumeration.dart';
 import 'package:aba_payment/model.dart';
-import 'package:aba_payment/service/strings.dart';
+import 'package:aba_payment/services/strings.dart';
 import 'package:aba_payment/ui/aba_checkout_success.dart';
 import 'package:aba_payment/ui/aba_checkout_webview.dart';
 import 'package:flutter/material.dart';
@@ -160,7 +160,7 @@ class _ABACheckoutContainerState extends State<ABACheckoutContainer>
         children: [
           ABAPaymentLists(
             value: _transaction!.option,
-            onChanged: (v) => setState(() => _transaction!.option = v),
+            onChanged: (v) => setState(() => _transaction!.option = v!),
           ),
           if (_error != null)
             Container(

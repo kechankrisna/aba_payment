@@ -1,0 +1,40 @@
+{
+  "correct": {
+    "req_time": "2023214131422",
+    "tran_id": "1676354695674462",
+    "amount": "6.0",
+    "items": "W3sibmFtZSI6IuGekeGfhuGek+Get+GeiSAxIiwicXVhbnRpdHkiOjEuMCwicHJpY2UiOjEuMH0seyJuYW1lIjoi4Z6R4Z+G4Z6T4Z634Z6JIDIiLCJxdWFudGl0eSI6MS4wLCJwcmljZSI6Mi4wfSx7Im5hbWUiOiLhnpHhn4bhnpPhnrfhnokgMyIsInF1YW50aXR5IjoxLjAsInByaWNlIjozLjB9XQ==",
+    "hash": "k81vO0Jw999j8GeQa2YSYrMt/rhBBPyMhYVZo+524HaJ/+B+HIusVRMvS7r2RlT+kizxBmzwZ1JrBYni81eWag==",
+    "firstname": "Miss",
+    "lastname": "My Lekha",
+    "phone": "010464144",
+    "email": "support@mylekha.app",
+    "return_url": null,
+    "continue_success_url": "",
+    "return_params": "",
+    "payment_option": "abapay_deeplink",
+    "shipping": "0.0",
+    "currency": "USD",
+    "merchant_id": "mylekha",
+    "type": "purchase"
+  },
+  "sample": {
+    "req_time": "202321413412",
+    "tran_id": "1676356862732690",
+    "amount": "6.0",
+    "items": "W3sibmFtZSI6IuGekeGfhuGek+Get+GeiSAxIiwicXVhbnRpdHkiOjEuMCwicHJpY2UiOjEuMH0seyJuYW1lIjoi4Z6R4Z+G4Z6T4Z634Z6JIDIiLCJxdWFudGl0eSI6MS4wLCJwcmljZSI6Mi4wfSx7Im5hbWUiOiLhnpHhn4bhnpPhnrfhnokgMyIsInF1YW50aXR5IjoxLjAsInByaWNlIjozLjB9XQ==",
+    "hash": "CzsWpvz/J+3o+nJ7nBuygOnjqhY0dbf9ZVxigLTgP8+rMEHxpFhX5uAeRLXA5fV4EvWBKxMmlfqkGK9FTNhCOw==",
+    "firstname": "Miss",
+    "lastname": "My Lekha",
+    "phone": "010464144",
+    "email": "support@mylekha.app",
+    "return_url": "https://stage.mylekha.app",
+    "continue_success_url": "",
+    "return_params": "",
+    "payment_option": "abapay_deeplink",
+    "shipping": "0.0",
+    "currency": "USD",
+    "merchant_id": "mylekha",
+    "type": "purchase"
+  }
+}
