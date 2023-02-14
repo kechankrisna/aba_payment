@@ -18,7 +18,6 @@ class ABATransaction {
   late String reqTime;
   late double? amount;
   List<ABATransactionItem>? items;
-  String? hash;
   String? firstname;
   String? lastname;
   String? phone;
@@ -28,8 +27,10 @@ class ABATransaction {
   String? returnParams;
   String? phoneCountryCode;
   String? preAuth;
-  ABAPaymentOption? option;
   double? shipping;
+  ABAPaymentOption option;
+  ABATransactionType type;
+  ABATransactionCurrency currency;
 
   ABATransaction({
     this.merchant,
@@ -37,7 +38,6 @@ class ABATransaction {
     required this.reqTime,
     this.amount,
     this.items,
-    this.hash,
     this.firstname,
     this.lastname,
     this.phone,
@@ -47,8 +47,10 @@ class ABATransaction {
     this.returnParams,
     this.phoneCountryCode,
     this.preAuth,
-    this.option,
-    this.shipping,
+    this.shipping = 0.00,
+    this.option = ABAPaymentOption.cards,
+    this.type = ABATransactionType.purchase,
+    this.currency = ABATransactionCurrency.USD,
   });
 
   factory ABATransaction.instance(ABAMerchant merchant) {
@@ -64,8 +66,6 @@ class ABATransaction {
       lastname: "",
       phone: "",
       email: "",
-      option: ABAPaymentOption.abapay_deeplink,
-      shipping: 0.00,
     );
   }
 
@@ -79,7 +79,6 @@ class ABATransaction {
       items: List.from(map['items'] ?? [])
           .map((e) => ABATransactionItem.fromMap(e))
           .toList(),
-      hash: map["hash"],
       firstname: map["firstname"],
       lastname: map["lastname"],
       phone: map["phone"],
@@ -89,8 +88,12 @@ class ABATransaction {
       returnParams: map["return_params"],
       phoneCountryCode: map["phone_country_code"],
       preAuth: "PreAuth",
-      option: map["payment_option"].toString().toAcceptPaymentOption,
       shipping: map["shipping"] ?? "" as double?,
+      option:
+          $ABAPaymentOptionMap[map["payment_option"]] ?? ABAPaymentOption.cards,
+      type: $ABATransactionTypeMap[map["type"]] ?? ABATransactionType.purchase,
+      currency: $ABATransactionCurrencyMap[map["currency"]] ??
+          ABATransactionCurrency.USD,
     );
   }
 
@@ -107,47 +110,74 @@ class ABATransaction {
   String get encodedItem =>
       EncoderService.base46_encode(items!.map((e) => e.toMap()).toList());
 
+  String get hash {
+    return ABAClientService(merchant).getHash(
+      reqTime: reqTime.toString(),
+      tranID: tranID.toString(),
+      amount: amount.toString(),
+      items: encodedItem.toString(),
+      shipping: shipping.toString(),
+      firstName: firstname.toString(),
+      lastName: lastname.toString(),
+      email: email.toString(),
+      phone: phone.toString(),
+      type: type.name.toString(),
+      paymentOption: option.name.toString(),
+      currency: currency.name.toString(),
+      returnUrl: encodedReturnUrl.toString(),
+    );
+  }
+
   /// ### [toMap]
   /// [return] map object
   Map<String, dynamic> toMap() {
-    var _currency = "USD";
-    var _type = "purchase";
-    String _hash = ABAClientService(merchant).getHash(
-      reqTime: reqTime,
-      tranID: tranID,
-      amount: "$amount",
-      items: encodedItem,
-      shipping: "$shipping",
-      firstName: firstname,
-      lastName: lastname,
-      email: email,
-      phone: phone,
-      type: _type,
-      paymentOption: option!.toText,
-      currency: _currency,
-      returnUrl: encodedReturnUrl,
-    );
     var map = {
+      "merchant_id": "${merchant!.merchantID}",
       "req_time": reqTime,
       "tran_id": tranID,
-      "amount": "$amount",
-      "items": "$encodedItem",
-      "hash": "$_hash",
-      "firstname": "$firstname",
-      "lastname": "$lastname",
-      "phone": "$phone",
-      "email": "$email",
+      "amount": amount.toString(),
+      "items": encodedItem.toString(),
+      "hash": hash,
+      "firstname": firstname.toString(),
+      "lastname": lastname.toString(),
+      "phone": phone.toString(),
+      "email": email.toString(),
       "return_url": encodedReturnUrl,
       "continue_success_url": continueSuccessUrl ?? "",
       "return_params": returnParams ?? "",
       // "return_params": {"tran_id": tranID, "status": 0},
       // "phone_country_code": phoneCountryCode ?? "855",
       // "PreAuth": preAuth,
-      "payment_option": "${option!.toText}",
-      "shipping": "$shipping",
-      "currency": "$_currency",
+      "shipping": shipping.toString(),
+      "type": type.name.toString(),
+      "payment_option": option.name.toString(),
+      "currency": currency.name.toString(),
+    };
+    return map;
+  }
+
+  Map<String, dynamic> toEncodedMap() {
+    var map = {
       "merchant_id": "${merchant!.merchantID}",
-      "type": _type,
+      "req_time": reqTime,
+      "tran_id": tranID,
+      "amount": amount.toString(),
+      "items": encodedItem.toString(),
+      "hash": hash,
+      "firstname": firstname.toString(),
+      "lastname": lastname.toString(),
+      "phone": phone.toString(),
+      "email": email.toString(),
+      "return_url": encodedReturnUrl,
+      "continue_success_url": continueSuccessUrl ?? "",
+      "return_params": returnParams ?? "",
+      // "return_params": {"tran_id": tranID, "status": 0},
+      // "phone_country_code": phoneCountryCode ?? "855",
+      // "PreAuth": preAuth,
+      "shipping": shipping.toString(),
+      "type": type.name.toString(),
+      "payment_option": option.name.toString(),
+      "currency": currency.name.toString(),
     };
     return map;
   }
