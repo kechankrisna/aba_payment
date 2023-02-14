@@ -62,7 +62,8 @@ class PaywayTransactionService {
       return res;
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
-      res.description = ABAClientService.handleResponseError(error);
+      res = res.copyWith(
+          description: ABAClientService.handleResponseError(error));
     }
     return res;
   }

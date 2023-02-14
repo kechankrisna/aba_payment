@@ -23,7 +23,7 @@ void main() {
       ));
     });
 
-    test("create a transaction", () async {
+    test("create a transaction then check status pending", () async {
       final service = PaywayTransactionService.instance!;
       final tranID = service.uniqueTranID();
 

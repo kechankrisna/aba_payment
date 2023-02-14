@@ -1,22 +1,20 @@
 class PaywayCreateTransactionResponse {
-  int? status;
-  String? description;
-  String? qrString;
-  String? qrImage;
-  String? abapayDeeplink;
-  String? appStore;
-  String? playStore;
-  String? rawcontent;
+  final int status;
+  final String description;
+  final String? qrString;
+  final String? qrImage;
+  final String? abapayDeeplink;
+  final String? appStore;
+  final String? playStore;
 
   PaywayCreateTransactionResponse({
-    this.status,
-    this.description,
+    this.status = -1,
+    this.description = 'Unknown Error',
     this.qrString,
     this.qrImage,
     this.abapayDeeplink,
     this.appStore,
     this.playStore,
-    this.rawcontent,
   });
 
   factory PaywayCreateTransactionResponse.fromMap(Map<String, dynamic> map) {
@@ -35,7 +33,6 @@ class PaywayCreateTransactionResponse {
       abapayDeeplink: map["abapay_deeplink"],
       appStore: map["app_store"],
       playStore: map["play_store"],
-      rawcontent: null,
     );
   }
   Map<String, dynamic> toMap() => {
@@ -46,11 +43,60 @@ class PaywayCreateTransactionResponse {
         "abapay_deeplink": abapayDeeplink,
         "app_store": appStore,
         "play_store": playStore,
-        "rawcontent": rawcontent,
       };
 
   String get message =>
       PaywayCreateTransactionResponseMessage.of(status!).message;
+
+  PaywayCreateTransactionResponse copyWith({
+    int? status,
+    String? description,
+    String? qrString,
+    String? qrImage,
+    String? abapayDeeplink,
+    String? appStore,
+    String? playStore,
+  }) {
+    return PaywayCreateTransactionResponse(
+      status: status ?? this.status,
+      description: description ?? this.description,
+      qrString: qrString ?? this.qrString,
+      qrImage: qrImage ?? this.qrImage,
+      abapayDeeplink: abapayDeeplink ?? this.abapayDeeplink,
+      appStore: appStore ?? this.appStore,
+      playStore: playStore ?? this.playStore,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'PaywayCreateTransactionResponse(status: $status, description: $description, qrString: $qrString, qrImage: $qrImage, abapayDeeplink: $abapayDeeplink, appStore: $appStore, playStore: $playStore)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is PaywayCreateTransactionResponse &&
+        other.status == status &&
+        other.description == description &&
+        other.qrString == qrString &&
+        other.qrImage == qrImage &&
+        other.abapayDeeplink == abapayDeeplink &&
+        other.appStore == appStore &&
+        other.playStore == playStore;
+  }
+
+  @override
+  int get hashCode {
+    return status.hashCode ^
+        description.hashCode ^
+        qrString.hashCode ^
+        qrImage.hashCode ^
+        abapayDeeplink.hashCode ^
+        appStore.hashCode ^
+        playStore.hashCode;
+  }
 }
 
 class PaywayCreateTransactionResponseMessage {
