@@ -49,7 +49,7 @@ class PaywayTransactionService {
     assert([ABAPaymentOption.abapay_deeplink].contains(_transaction.option));
     Map<String, dynamic> map = _transaction.toFormDataMap();
     debugPrint(json.encode(map));
-    var formData = FormData.fromMap(map); 
+    var formData = FormData.fromMap(map);
     try {
       if (helper == null) return PaywayCreateTransactionResponse();
       final client = helper!.client;
@@ -111,7 +111,8 @@ class PaywayTransactionService {
       return res;
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
-      res.description = ABAClientService.handleResponseError(error);
+      res = res.copyWith(
+          description: ABAClientService.handleResponseError(error));
     }
     return res;
   }

@@ -25,7 +25,6 @@ void main() {
 
     test("create a transaction", () async {
       final service = PaywayTransactionService.instance!;
-      final reqTime = service.uniqueReqTime();
       final tranID = service.uniqueTranID();
 
       var _transaction = PaywayCreateTransaction(
@@ -35,7 +34,7 @@ void main() {
             PaywayTransactionItem(name: "ទំនិញ 2", price: 2, quantity: 1),
             PaywayTransactionItem(name: "ទំនិញ 3", price: 3, quantity: 1),
           ],
-          reqTime: reqTime,
+          reqTime: service.uniqueReqTime(),
           tranId: tranID,
           email: 'support@mylekha.app',
           firstname: 'Miss',
@@ -45,10 +44,18 @@ void main() {
           shipping: 0.0,
           returnUrl: "https://stage.mylekha.app");
 
-      var response = await service.createTransaction(transaction: _transaction);
-      print(response.description);
+      var createResponse =
+          await service.createTransaction(transaction: _transaction);
 
-      expect(response.abapayDeeplink != null, true);
+      expect(createResponse.abapayDeeplink != null, true);
+
+      var checkResponse = await service.checkTransaction(
+          transaction: PaywayCheckTransaction(
+        tranId: _transaction.tranId,
+        reqTime: service.uniqueReqTime(),
+      ));
+
+      expect(checkResponse.status  == 2, true);
     });
   });
 }
