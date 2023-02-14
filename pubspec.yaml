@@ -17,6 +17,7 @@ dependencies:
   url_launcher: ^6.0.4 # launch any scheme
   easy_logger: ^0.0.2 # bueaty logger
   fluttertoast: ^8.0.7 # easy to handle toast bar
+  flutter_dotenv: ^5.0.2
   
 dev_dependencies:
   flutter_test:
