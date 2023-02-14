@@ -69,7 +69,7 @@ class ABAClientService {
 
   String getHash({
     required String reqTime,
-    required String tranID,
+    required String tranId,
     String amount = "",
     String items = "",
     String shipping = "",
@@ -102,9 +102,9 @@ class ABAClientService {
     // assert(amount != null);
     var key = utf8.encode(merchant!.merchantApiKey!);
     var raw =
-        "$reqTime ${merchant!.merchantID} $tranID $amount $items $shipping $ctid $pwt $firstName $lastName $email $phone $type $paymentOption $returnUrl $cancelUrl $continueSuccessUrl $returnDeeplink $currency $customFields $returnParams";
+        "$reqTime ${merchant!.merchantID} $tranId $amount $items $shipping $ctid $pwt $firstName $lastName $email $phone $type $paymentOption $returnUrl $cancelUrl $continueSuccessUrl $returnDeeplink $currency $customFields $returnParams";
     var str =
-        "$reqTime${merchant!.merchantID}$tranID$amount$items$shipping$ctid$pwt$firstName$lastName$email$phone$type$paymentOption$returnUrl$cancelUrl$continueSuccessUrl$returnDeeplink$currency$customFields$returnParams";
+        "$reqTime${merchant!.merchantID}$tranId$amount$items$shipping$ctid$pwt$firstName$lastName$email$phone$type$paymentOption$returnUrl$cancelUrl$continueSuccessUrl$returnDeeplink$currency$customFields$returnParams";
     ABAPayment.logger.warning("raw $raw");
     ABAPayment.logger.warning("str $str");
     var bytes = utf8.encode(str);
