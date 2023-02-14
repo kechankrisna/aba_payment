@@ -104,8 +104,7 @@ class ABAClientService {
         "$reqTime ${merchant!.merchantID} $tranId $amount $items $shipping $ctid $pwt $firstName $lastName $email $phone $type $paymentOption $returnUrl $cancelUrl $continueSuccessUrl $returnDeeplink $currency $customFields $returnParams";
     var str =
         "$reqTime${merchant!.merchantID}$tranId$amount$items$shipping$ctid$pwt$firstName$lastName$email$phone$type$paymentOption$returnUrl$cancelUrl$continueSuccessUrl$returnDeeplink$currency$customFields$returnParams";
-    ABAPayment.logger.warning("raw $raw");
-    ABAPayment.logger.warning("str $str");
+    
     var bytes = utf8.encode(str);
     var digest = crypto.Hmac(crypto.sha512, key).convert(bytes);
     var hash = base64Encode(digest.bytes);
