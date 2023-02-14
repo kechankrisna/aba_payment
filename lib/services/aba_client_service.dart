@@ -14,7 +14,7 @@ class ABAClientService {
   /// ### Example:
   /// ```
   /// var merchant = ABAMerchant();
-  /// var helper = ABAClientHelper(merchant);
+  /// var helper = ABAClientService(merchant);
   /// var dio = helper.getDio();
   /// ```
   Dio get client {
