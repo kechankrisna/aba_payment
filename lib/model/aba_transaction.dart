@@ -5,15 +5,17 @@ import 'package:aba_payment/extension.dart';
 import 'package:aba_payment/model/aba_mechant.dart';
 import 'package:aba_payment/model/aba_payment.dart';
 import 'package:aba_payment/model/aba_transacition_item.dart';
-import 'package:aba_payment/service/aba_client_service.dart';
+import 'package:aba_payment/services/services.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
 import 'aba_server_response.dart';
 
 class ABATransaction {
   late ABAMerchant? merchant;
-  late String? tranID;
+  late String tranID;
+  late String reqTime;
   late double? amount;
   List<ABATransactionItem>? items;
   String? hash;
@@ -26,14 +28,13 @@ class ABATransaction {
   String? returnParams;
   String? phoneCountryCode;
   String? preAuth;
-  AcceptPaymentOption? paymentOption;
+  ABAPaymentOption? option;
   double? shipping;
-
-  String get reqTime => "${DateFormat("yMddHms").format(DateTime.now())}";
 
   ABATransaction({
     this.merchant,
-    this.tranID,
+    required this.tranID,
+    required this.reqTime,
     this.amount,
     this.items,
     this.hash,
@@ -46,22 +47,24 @@ class ABATransaction {
     this.returnParams,
     this.phoneCountryCode,
     this.preAuth,
-    this.paymentOption,
+    this.option,
     this.shipping,
   });
 
   factory ABATransaction.instance(ABAMerchant merchant) {
     // var format = DateFormat("yMddHms").format(DateTime.now()); //2021 01 23 234559 OR 2021 11 07 132947
+    final now = DateTime.now();
     return ABATransaction(
       merchant: merchant,
-      tranID: "${(DateTime.now()).microsecondsSinceEpoch}",
+      tranID: "${now.microsecondsSinceEpoch}",
+      reqTime: "${DateFormat("yMddHms").format(now)}",
       amount: 0.00,
       items: [],
       firstname: "",
       lastname: "",
       phone: "",
       email: "",
-      paymentOption: AcceptPaymentOption.abapay_deeplink,
+      option: ABAPaymentOption.abapay_deeplink,
       shipping: 0.00,
     );
   }
@@ -71,6 +74,7 @@ class ABATransaction {
     return ABATransaction(
       merchant: ABAMerchant.fromMap(map),
       tranID: map["tran_id"],
+      reqTime: map["req_time"],
       amount: double.tryParse("${map["amount"]}"),
       items: List.from(map['items'] ?? [])
           .map((e) => ABATransactionItem.fromMap(e))
@@ -85,7 +89,7 @@ class ABATransaction {
       returnParams: map["return_params"],
       phoneCountryCode: map["phone_country_code"],
       preAuth: "PreAuth",
-      paymentOption: map["payment_option"].toString().toAcceptPaymentOption,
+      option: map["payment_option"].toString().toAcceptPaymentOption,
       shipping: map["shipping"] ?? "" as double?,
     );
   }
@@ -98,58 +102,48 @@ class ABATransaction {
     return result;
   }
 
+  String get encodedReturnUrl => EncoderService.base46_encode(returnUrl);
+
+  String get encodedItem =>
+      EncoderService.base46_encode(items!.map((e) => e.toMap()).toList());
+
   /// ### [toMap]
   /// [return] map object
   Map<String, dynamic> toMap() {
-    String _encodedItem = "";
-    if (this.items?.isNotEmpty == true) {
-      if (this.amount != this.totalPrice) {
-        ABAPayment.logger
-            .error("amount $amount is not equal totalPrice $totalPrice");
-      }
-      var itemText = [...this.items!.map((e) => e.toMap()).toList()];
-      _encodedItem = base64Encode(json.encode(itemText).runes.toList());
-      // _encodedItem = "W3sibmFtZSI6InRlc3QiLCJxdWFudGl0eSI6MSwicHJpY2UiOjZ9XQ==";
-      ABAPayment.logger.info("itemText $itemText");
-      ABAPayment.logger.info("_encodedItem $_encodedItem");
-    }
     var _currency = "USD";
     var _type = "purchase";
     String _hash = ABAClientService(merchant).getHash(
       reqTime: reqTime,
-      tranID: tranID!,
+      tranID: tranID,
       amount: "$amount",
-      items: _encodedItem,
+      items: encodedItem,
       shipping: "$shipping",
       firstName: firstname,
       lastName: lastname,
       email: email,
       phone: phone,
       type: _type,
-      paymentOption: paymentOption!.toText,
+      paymentOption: option!.toText,
       currency: _currency,
+      returnUrl: encodedReturnUrl,
     );
-    ABAPayment.logger.info("req_time $reqTime");
-    ABAPayment.logger.info("tran_id $tranID");
-    ABAPayment.logger.info("_hash $_hash");
-    ABAPayment.logger.info("amount $amount");
     var map = {
       "req_time": reqTime,
       "tran_id": tranID,
       "amount": "$amount",
-      "items": "$_encodedItem",
+      "items": "$encodedItem",
       "hash": "$_hash",
       "firstname": "$firstname",
       "lastname": "$lastname",
       "phone": "$phone",
       "email": "$email",
-      "return_url": returnUrl,
+      "return_url": encodedReturnUrl,
       "continue_success_url": continueSuccessUrl ?? "",
       "return_params": returnParams ?? "",
       // "return_params": {"tran_id": tranID, "status": 0},
       // "phone_country_code": phoneCountryCode ?? "855",
       // "PreAuth": preAuth,
-      "payment_option": "${paymentOption!.toText}",
+      "payment_option": "${option!.toText}",
       "shipping": "$shipping",
       "currency": "$_currency",
       "merchant_id": "${merchant!.merchantID}",
@@ -168,10 +162,12 @@ class ABATransaction {
     try {
       var helper = ABAClientService(merchant);
       var dio = helper.client;
+      debugPrint(json.encode(map));
+      dio.interceptors.add(dioLoggerInterceptor);
       Response<String> response = await dio.post("/purchase", data: formData);
       // ABAPayment.logger.debug(response);
-      var map = json.decode(response.data!) as Map<String, dynamic>;
-      res = ABAServerResponse.fromMap(map);
+      var cast = json.decode(response.data!) as Map<String, dynamic>;
+      res = ABAServerResponse.fromMap(cast);
       return res;
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");

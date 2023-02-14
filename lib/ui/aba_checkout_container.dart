@@ -159,8 +159,8 @@ class _ABACheckoutContainerState extends State<ABACheckoutContainer>
         mainAxisSize: MainAxisSize.min,
         children: [
           ABAPaymentLists(
-            value: _transaction!.paymentOption,
-            onChanged: (v) => setState(() => _transaction!.paymentOption = v),
+            value: _transaction!.option,
+            onChanged: (v) => setState(() => _transaction!.option = v),
           ),
           if (_error != null)
             Container(
@@ -210,7 +210,7 @@ class _ABACheckoutContainerState extends State<ABACheckoutContainer>
     _updateTransaction();
     widget.onBeginCheckout?.call(_transaction);
 
-    if (_transaction!.paymentOption == AcceptPaymentOption.abapay_deeplink) {
+    if (_transaction!.option == ABAPaymentOption.abapay_deeplink) {
       var createResult = await _transaction!.create();
 
       widget.onFinishCheckout?.call(_transaction);
@@ -240,8 +240,8 @@ class _ABACheckoutContainerState extends State<ABACheckoutContainer>
       } else {
         Fluttertoast.showToast(msg: "${createResult.description}ff");
       }
-    } else if (_transaction!.paymentOption == AcceptPaymentOption.cards ||
-        _transaction!.paymentOption == AcceptPaymentOption.abapay) {
+    } else if (_transaction!.option == ABAPaymentOption.cards ||
+        _transaction!.option == ABAPaymentOption.abapay) {
       var map = _transaction!.toMap();
       var parsed = Uri.tryParse(widget.checkoutApiUrl)!;
       Uri uri;

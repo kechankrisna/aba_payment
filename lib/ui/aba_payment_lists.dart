@@ -7,8 +7,8 @@ import 'package:aba_payment/enumeration.dart';
 const package = "aba_payment";
 
 class ABAPaymentLists extends StatefulWidget {
-  final AcceptPaymentOption? value;
-  final Function(AcceptPaymentOption? value)? onChanged;
+  final ABAPaymentOption? value;
+  final Function(ABAPaymentOption? value)? onChanged;
 
   const ABAPaymentLists({Key? key, this.value, this.onChanged})
       : super(key: key);
@@ -17,7 +17,7 @@ class ABAPaymentLists extends StatefulWidget {
 }
 
 class _ABAPaymentListsState extends State<ABAPaymentLists> {
-  AcceptPaymentOption? _value;
+  ABAPaymentOption? _value;
 
   @override
   void initState() {
@@ -49,13 +49,13 @@ class _ABAPaymentListsState extends State<ABAPaymentLists> {
                 height: 25,
               ),
             ),
-            trailing: _value == AcceptPaymentOption.cards
+            trailing: _value == ABAPaymentOption.cards
                 ? Icon(
                     Icons.check_circle_outline_rounded,
                     color: Colors.green,
                   )
                 : Icon(Icons.lens_outlined),
-            onTap: () => _onTap(AcceptPaymentOption.cards),
+            onTap: () => _onTap(ABAPaymentOption.cards),
           ),
           (kIsWeb ||
                   io.Platform.isMacOS ||
@@ -69,13 +69,13 @@ class _ABAPaymentListsState extends State<ABAPaymentLists> {
                   ),
                   title: Text(Strings.abaPaywayLabel),
                   subtitle: Text(Strings.scanToPayWithABAMobileLabel),
-                  trailing: _value == AcceptPaymentOption.abapay
+                  trailing: _value == ABAPaymentOption.abapay
                       ? Icon(
                           Icons.check_circle_outline_rounded,
                           color: Colors.green,
                         )
                       : Icon(Icons.lens_outlined),
-                  onTap: () => _onTap(AcceptPaymentOption.abapay),
+                  onTap: () => _onTap(ABAPaymentOption.abapay),
                 )
               : ListTile(
                   leading: Image(
@@ -85,20 +85,20 @@ class _ABAPaymentListsState extends State<ABAPaymentLists> {
                   ),
                   title: Text(Strings.abaPayLabel),
                   subtitle: Text(Strings.tapToPayWithABAMobileLabel),
-                  trailing: _value == AcceptPaymentOption.abapay_deeplink
+                  trailing: _value == ABAPaymentOption.abapay_deeplink
                       ? Icon(
                           Icons.check_circle_outline_rounded,
                           color: Colors.green,
                         )
                       : Icon(Icons.lens_outlined),
-                  onTap: () => _onTap(AcceptPaymentOption.abapay_deeplink),
+                  onTap: () => _onTap(ABAPaymentOption.abapay_deeplink),
                 ),
         ],
       ),
     );
   }
 
-  _onTap(AcceptPaymentOption value) {
+  _onTap(ABAPaymentOption value) {
     if (value != _value) {
       setState(() => _value = value);
       widget.onChanged?.call(_value);
