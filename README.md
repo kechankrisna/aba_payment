@@ -68,7 +68,7 @@ This package will allow developer integrate their flutter app with aba payway ea
   var response =
       await service.checkTransaction(transaction: _transaction);
   print(response.description);
-  ```
+  ````
 
   ### Example: generate correct uri path for checkout link
   ````dart
