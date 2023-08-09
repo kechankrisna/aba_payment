@@ -1,6 +1,6 @@
 name: aba_payment
 description: Allow you to integrate your flutter app with ABA PayWay
-version: 0.0.4
+version: 0.0.5
 homepage: https://github.com/kechankrisna/aba_payment
 
 environment:

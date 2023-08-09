@@ -1,3 +1,8 @@
+## 0.0.5
+* improve web
+* improve package
+* support flutter 3 and dart 3
+
 ## 0.0.4
 * breaking change while adding service
 * encoded and decoded list of unicode item
