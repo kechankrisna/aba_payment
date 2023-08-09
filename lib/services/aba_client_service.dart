@@ -1,9 +1,10 @@
 import 'dart:convert';
+
 import 'package:crypto/crypto.dart' as crypto;
 import 'package:aba_payment/models/models.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-// import 'package:flutter/material.dart';
+import '/services/http_client_adapter/http_client_adapter.dart';
 
 class ABAClientService {
   final ABAMerchant? merchant;
@@ -20,8 +21,10 @@ class ABAClientService {
   Dio get client {
     Dio dio = Dio();
     dio.options.baseUrl = merchant!.baseApiUrl!;
-    dio.options.connectTimeout = 60 * 1000; //60 seconds
-    dio.options.receiveTimeout = 60 * 1000; //60 seconds
+    dio.options.connectTimeout = const Duration(seconds: 60);
+    dio.options.receiveTimeout = const Duration(seconds: 60);
+
+    dio.httpClientAdapter = PlatformHttpClientAdapter().clientAdapter();
 
     /// [add interceptors]
     dio.interceptors
@@ -36,7 +39,7 @@ class ABAClientService {
       return handler.next(response); // continue
       // If you want to reject the request with a error message,
       // you can reject a `DioError` object eg: return `dio.reject(dioError)`
-    }, onError: (DioError e, handler) {
+    }, onError: (DioException e, handler) {
       // Do something with response error
       return handler.next(e); //continue
       // If you want to resolve the request with some custom data，
@@ -104,7 +107,7 @@ class ABAClientService {
         "$reqTime ${merchant!.merchantID} $tranId $amount $items $shipping $ctid $pwt $firstName $lastName $email $phone $type $paymentOption $returnUrl $cancelUrl $continueSuccessUrl $returnDeeplink $currency $customFields $returnParams";
     var str =
         "$reqTime${merchant!.merchantID}$tranId$amount$items$shipping$ctid$pwt$firstName$lastName$email$phone$type$paymentOption$returnUrl$cancelUrl$continueSuccessUrl$returnDeeplink$currency$customFields$returnParams";
-    
+
     var bytes = utf8.encode(str);
     var digest = crypto.Hmac(crypto.sha512, key).convert(bytes);
     var hash = base64Encode(digest.bytes);
@@ -161,28 +164,34 @@ class ABAClientService {
 
   static String handleResponseError(dynamic error) {
     String errorDescription = "";
-    if (error is DioError) {
-      DioError dioError = error;
+    if (error is DioException) {
+      DioException dioError = error;
       switch (dioError.type) {
-        case DioErrorType.connectTimeout:
+        case DioExceptionType.connectionTimeout:
           errorDescription = "Connection timeout with API server";
           break;
-        case DioErrorType.sendTimeout:
+        case DioExceptionType.sendTimeout:
           errorDescription = "Send timeout in connection with API server";
           break;
-        case DioErrorType.receiveTimeout:
+        case DioExceptionType.receiveTimeout:
           errorDescription = "Receive timeout in connection with API server";
           break;
-        case DioErrorType.response:
+        case DioExceptionType.badResponse:
           errorDescription =
               "Received invalid status code: ${dioError.response!.statusCode}";
           break;
-        case DioErrorType.cancel:
+        case DioExceptionType.cancel:
           errorDescription = "Request to API server was cancelled";
           break;
-        case DioErrorType.other:
+        case DioExceptionType.unknown:
           errorDescription =
               "Connection to API server failed due to internet connection";
+          break;
+        case DioExceptionType.badCertificate:
+          errorDescription = "Bad Certificate Error";
+          break;
+        case DioExceptionType.connectionError:
+          errorDescription = "Connection Error";
           break;
       }
     } else {
@@ -214,7 +223,7 @@ final dioLoggerInterceptor =
       "└------------------------------------------------------------------------------");
   handler.next(response);
   // return response; // continue
-}, onError: (DioError error, handler) async {
+}, onError: (DioException error, handler) async {
   debugPrint("| [DIO] Error: ${error.error}: ${error.response.toString()}");
   debugPrint(
       "└------------------------------------------------------------------------------");

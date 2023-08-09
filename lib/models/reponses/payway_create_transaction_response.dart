@@ -46,7 +46,7 @@ class PaywayCreateTransactionResponse {
       };
 
   String get message =>
-      PaywayCreateTransactionResponseMessage.of(status!).message;
+      PaywayCreateTransactionResponseMessage.of(status).message;
 
   PaywayCreateTransactionResponse copyWith({
     int? status,

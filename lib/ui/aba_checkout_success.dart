@@ -22,7 +22,7 @@ class ABACheckoutSuccess extends StatelessWidget {
               SizedBox(height: 15),
               Text(
                 Strings.paymentSuccessfullyLabel,
-                style: themeData.textTheme.headline6,
+                style: themeData.textTheme.titleLarge,
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 15),

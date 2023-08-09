@@ -96,7 +96,7 @@ class ABACheckoutContainer extends StatefulWidget {
     this.items = const [],
     required this.checkoutApiUrl,
     required this.merchant,
-    this.enabled: false,
+    this.enabled = false,
     this.checkoutLabel,
     this.onBeginCheckout,
     this.onFinishCheckout,
@@ -224,14 +224,14 @@ class _ABACheckoutContainerState extends State<ABACheckoutContainer>
 
         /// [open native using deeplink]
         if (createResult.abapayDeeplink != null) {
-          if (await canLaunch(createResult.abapayDeeplink!)) {
+          if (await canLaunchUrl(Uri.parse(createResult.abapayDeeplink!))) {
             setState(() => _requiredCheck = true);
-            await launch(createResult.abapayDeeplink!);
+            await canLaunchUrl(Uri.parse(createResult.abapayDeeplink!));
           } else {
             if (io.Platform.isIOS) {
-              await launch(createResult.appStore!);
+              await canLaunchUrl(Uri.parse(createResult.appStore!));
             } else if (io.Platform.isAndroid) {
-              await launch(createResult.playStore!);
+              await canLaunchUrl(Uri.parse(createResult.playStore!));
             }
           }
         } else {
